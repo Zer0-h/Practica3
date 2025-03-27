@@ -1,210 +1,198 @@
 package model;
 
-import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import view.View;
+import controller.Controller;
+import java.util.Random;
 
-/**
- * Classe Model que representa el tauler i la lògica del problema de Tromino.
- * S'encarrega de gestionar l'estat del tauler i proporcionar mètodes per
- * manipular-lo.
- *
- * @author tonitorres
- */
 public class Model {
 
-    // Mides disponibles per al tauler
-    private final Integer[] midesSeleccionables;
+    // PUNTEROS DEL PATRÓN MVC
+    private View vista;
+    private Controller controlador;
 
-    // Matriu que representa el tauler de joc
-    private int[][] tauler;
+    private int N; // Número de puntos
+    private Punto[] puntos; // Puntos generados según la distribución
+    private Punto[] mejorSolucion; // Pareja que forma la mejor solución
+    private Double mejorDistancia; // Distancia de la mejor solución
 
-    // Paràmetres relacionats amb el temps d'execució
-    private double constantTromino;
-    private double tempsExecucio;
+    private Distribution distribucion; // Distribución para generar los puntos
+    private Method metodo; // Método algoritmico para resolver el problema
+    private boolean minimizar; // Opción para minimizar o maximizar la distáncia entre puntos
+    private int ANCHO; // Ancho de la ventana
+    private int ALTO; // Alto de la ventana
 
-    // Comptador de trominos col·locats
-    private AtomicInteger numTromino;
 
-    // Coordenades del forat inicial
-    private int foratX;
-    private int foratY;
-
-    // Estat de l'execució
-    private boolean enExecucio;
-    private boolean resolt;
-
-    // Colors per als trominos
-    private Color trominoColor;
-    private final Map<Integer, Color> trominoColors;
-
-    /**
-     * Constructor de la classe Model. Inicialitza les mides del tauler
-     * disponibles
-     * i estableix valors per defecte.
-     */
+    // CONSTRUCTORS
     public Model() {
-        constantTromino = 1.0;
-        midesSeleccionables = new Integer[]{2, 3, 4, 5, 6, 7};
-        enExecucio = false;
-        resolt = false;
-        trominoColor = Color.WHITE;
-        trominoColors = new HashMap<>();
+        this.mejorSolucion = new Punto[2];
     }
 
-    /** =======================
-     * GETTERS
-     * =======================
-     */
-    public Integer[] getMidesSeleccionables() {
-        return midesSeleccionables;
+    public Model(View vista, Controller controlador, int n) {
+        this.vista = vista;
+        this.controlador = controlador;
+        this.N = n;
+        this.puntos = null;
+        this.mejorSolucion = new Punto[2];
+        ANCHO = vista.getGraphWidth();
+        ALTO = vista.getGraphHeight();
     }
 
-    public int getForatX() {
-        return foratX;
-    }
-
-    public int getForatY() {
-        return foratY;
-    }
-
-    public int getMidaTauler() {
-        return tauler.length;
-    }
-
-    public double getTempsExecucio() {
-        return tempsExecucio;
-    }
-
-    public boolean getEnExecucio() {
-        return enExecucio;
-    }
-
-    public boolean getResolt() {
-        return resolt;
-    }
-
-    /** =======================
-     * SETTERS
-     * =======================
-     */
-    public void setTempsExecucio(double value) {
-        tempsExecucio = value;
-    }
-
-    public void setEnExecucio(boolean value) {
-        enExecucio = value;
-    }
-
-    public void setResolt(boolean value) {
-        resolt = value;
-    }
-
-    /**
-     * Calcula la constant multiplicativa del procés del tromino per estimar
-     * el temps d'execució basant-se en el temps transcorregut.
-     *
-     * @param elapsedTime Temps total d'execució en nanosegons
-     */
-    public void calculaConstantTromino(double elapsedTime) {
-        constantTromino = (elapsedTime * 1.0) / Math.pow(tauler.length, 2);
-    }
-
-    /**
-     * Estima el temps d'execució del procés total per a la mida actual del
-     * tauler.
-     *
-     * @return Temps estimat en segons
-     */
-    public double estimaTempsExecucio() {
-        return (constantTromino * Math.pow(tauler.length, 2)) / 1_000_000_000.0;
-    }
-
-    /** ==============================
-     * GESTIÓ DEL TAULER
-     * ==============================
-     */
-    public void inicialitzaTauler(int potencia) {
-        int tamany = (int) Math.pow(2, potencia);
-        tauler = new int[tamany][tamany];
-        numTromino = new AtomicInteger(1);
-        resolt = false;
-        foratX = -1;
-        foratY = -1;
-    }
-
-    public void assignarForat(int x, int y) {
-        foratX = x;
-        foratY = y;
-        tauler[foratX][foratY] = -1;
-    }
-
-    public void netejarForat() {
-        tauler[foratX][foratY] = 0;
-    }
-
-    public boolean hiHaForatSeleccionat() {
-        return foratX != -1 && foratY != -1;
-    }
-
-    /** ==============================
-     * GESTIÓ DELS TROMINOS
-     * ==============================
-     */
-    public boolean esCasellaBuida(int x, int y) {
-        return tauler[x][y] == 0;
-    }
-
-    public boolean esCasellaForat(int x, int y) {
-        return tauler[x][y] == -1;
-    }
-
-    public boolean esCasellaTromino(int x, int y) {
-        return tauler[x][y] > 0;
-    }
-
-    public synchronized void colocaTromino(int x, int y, int trominoNumber) {
-        if (tauler[x][y] == 0) {
-            tauler[x][y] = trominoNumber;
-            trominoColors.put(trominoNumber, trominoColor);
+    private void generarDatos() {
+        ANCHO = vista.getGraphWidth();
+        ALTO = vista.getGraphHeight();
+        puntos = new Punto[N];
+        Random rnd = new Random();
+        switch (this.distribucion) {
+            case GAUSSIAN -> {
+                double[] xg = distribucioGaussiana(N);
+                double[] yg = distribucioGaussiana(N);
+                for (int i = 0; i < puntos.length; i++) {
+                    double x = (xg[i] + 1) * ANCHO / 2;// Campana de Gauss en el centro de la ventana
+                    double y = (yg[i] + 1) * ALTO / 2;
+                    puntos[i] = new Punto(x, y);
+                }
+            }
+            case EXPONENCIAL -> {
+                double[] xg = distribucioExponencial(N);
+                double[] yg = distribucioExponencial(N);
+                for (int i = 0; i < puntos.length; i++) {
+                    double x = (xg[i] + 1) * ANCHO / 2;
+                    double y = (yg[i] + 1) * ALTO / 2;
+                    puntos[i] = new Punto(x, y);
+                }
+            }
+            case UNIFORME -> {
+                for (int i = 0; i < puntos.length; i++) {
+                    double x = rnd.nextDouble() * ANCHO;
+                    double y = rnd.nextDouble() * ALTO;
+                    puntos[i] = new Punto(x, y);
+                }
+            }
+            default ->
+                throw new AssertionError();
         }
     }
 
-    public synchronized int incrementaIOBtenirTrominoActual() {
-        return numTromino.incrementAndGet();
+    private double[] distribucioGaussiana(int n) {
+        Random rand = new Random();
+        double[] v = new double[n];
+        double maxAbs = 0;
+        for (int i = 0; i < v.length; i++) {
+            v[i] = rand.nextGaussian();
+            if (Math.abs(v[i]) > maxAbs) {
+                maxAbs = Math.abs(v[i]);
+            }
+        }
+        for (int i = 0; i < v.length; i++) {
+            v[i] = v[i] / maxAbs;
+        }
+        return v;
     }
 
-    /** ==============================
-     * DETECCIÓ DE BORDES
-     * ==============================
+    private double[] distribucioExponencial(int n) {
+        Random rand = new Random();
+        double[] v = new double[n];
+        double max = 0;
+        for (int i = 0; i < n; i++) {
+            double u = rand.nextDouble(); // U(0,1)
+            v[i] = -Math.log(1 - u); // Exponencial(1)
+            if (v[i] > max) {
+                max = v[i];
+            }
+        }
+        // Normalitzem a l'interval [-1, 1]
+        for (int i = 0; i < n; i++) {
+            v[i] = (v[i] / max) * 2 - 1;
+        }
+        return v;
+    }
+
+    /**
+     * Inicializa los atributos soluciones y distancias para
      */
-    public boolean esVoraSuperiorTromino(int x, int y) {
-        return x == 0 || tauler[x - 1][y] != tauler[x][y];
+    public void initSoluciones() {
+        mejorSolucion = new Punto[2];
+        mejorSolucion[0] = new Punto(0d, 0d);
+        mejorSolucion[1] = new Punto(300d, 300d);
+        mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public boolean esVoraInferiorTromino(int x, int y) {
-        return x == tauler.length - 1 || tauler[x + 1][y] != tauler[x][y];
+    public void pushSolucion(Punto[] puntos) {
+        double distancia = Punto.distancia(puntos[0], puntos[1]);
+        if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
+            mejorDistancia = distancia;
+            mejorSolucion[0] = puntos[0];
+            mejorSolucion[1] = puntos[1];
+        }
     }
 
-    public boolean esVoraEsquerraTromino(int x, int y) {
-        return y == 0 || tauler[x][y - 1] != tauler[x][y];
+    // GETTERS & SETTERS
+    public View getVista() {
+        return vista;
     }
 
-    public boolean esVoraDretaTromino(int x, int y) {
-        return y == tauler[x].length - 1 || tauler[x][y + 1] != tauler[x][y];
+    public void setVista(View vista) {
+        this.vista = vista;
     }
 
-    /** ==============================
-     * COLOR DELS TROMINOS
-     * ==============================
-     */
-    public void setTrominoColor(Color color) {
-        trominoColor = color;
+    public Controller getControlador() {
+        return controlador;
     }
 
-    public Color getColorPerTromino(int x, int y) {
-        int trominoNum = tauler[x][y];
-        return trominoColors.getOrDefault(trominoNum, Color.WHITE);
+    public void setControlador(Controller controlador) {
+        this.controlador = controlador;
     }
+
+    public Punto[] getPuntos() {
+        return puntos;
+    }
+
+    public void setPuntos(Punto[] puntos) {
+        this.puntos = puntos;
+    }
+
+    public Distribution getDistribucion() {
+        return distribucion;
+    }
+
+    public void setDistribucion(Distribution distribucion) {
+        this.distribucion = distribucion;
+    }
+
+    public boolean isMinimizar() {
+        return minimizar;
+    }
+
+    public void setMinimizar(boolean minimizar) {
+        this.minimizar = minimizar;
+    }
+
+    public Method getMetodo() {
+        return metodo;
+    }
+
+    public void setMetodo(Method metodo) {
+        this.metodo = metodo;
+    }
+
+    public Punto[] getMejorSolucion() {
+        return mejorSolucion;
+    }
+
+    public Double getMejorDistancia() {
+        return mejorDistancia;
+    }
+
+    public void reset(Distribution distribution, int n) {
+        this.distribucion = distribution;
+        this.N = n;
+        this.mejorSolucion = null;
+        this.mejorDistancia = null;
+        this.generarDatos();
+    }
+
+    public boolean exists() {
+        return this.puntos != null;
+    }
+
 }
