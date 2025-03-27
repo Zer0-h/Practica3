@@ -1,4 +1,4 @@
-package view;
+package vista;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -10,13 +10,13 @@ import javax.swing.border.LineBorder;
 
 public class RightLateralPanel extends JPanel {
 
-    private View vista;
+    private Vista vista;
     private int x, y, width, height;
     private JButton startB;
     public JPanel soluciones;
     private TimePanel timePanel;
 
-    public RightLateralPanel(View v) {
+    public RightLateralPanel(Vista v) {
         this.vista = v;
         init();
     }

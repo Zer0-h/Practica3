@@ -1,8 +1,8 @@
 package algoritmosavanzadosp3;
 
-import controller.Controller;
+import controlador.Controller;
 import model.Model;
-import view.View;
+import vista.Vista;
 
 public class AlgoritmosAvanzadosP3 {
 
@@ -12,7 +12,7 @@ public class AlgoritmosAvanzadosP3 {
 
     private static void MVCInit() {
         Model modelo = new Model();
-        View vista = new View();
+        Vista vista = new Vista();
         Controller controlador = new Controller();
 
         modelo.setVista(vista);

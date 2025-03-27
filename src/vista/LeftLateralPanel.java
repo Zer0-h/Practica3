@@ -1,4 +1,4 @@
-package view;
+package vista;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,7 +17,7 @@ import model.Method;
  */
 public class LeftLateralPanel extends JPanel {
 
-    private View vista;
+    private Vista vista;
 
     private JComboBox distribution;
     private JComboBox proximity;
@@ -32,7 +32,7 @@ public class LeftLateralPanel extends JPanel {
      * Panel Lateral izquierdo encargado de la configuración del algoritmo y los
      * datos de la aplicación
      */
-    public LeftLateralPanel(View v) {
+    public LeftLateralPanel(Vista v) {
         this.vista = v;
         this.init();
     }

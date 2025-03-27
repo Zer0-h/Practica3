@@ -1,18 +1,18 @@
 package model;
 
-import view.View;
-import controller.Controller;
+import vista.Vista;
+import controlador.Controller;
 import java.util.Random;
 
 public class Model {
 
     // PUNTEROS DEL PATRÓN MVC
-    private View vista;
+    private Vista vista;
     private Controller controlador;
 
     private int N; // Número de puntos
-    private Punto[] puntos; // Puntos generados según la distribución
-    private Punto[] mejorSolucion; // Pareja que forma la mejor solución
+    private Punt[] puntos; // Puntos generados según la distribución
+    private Punt[] mejorSolucion; // Pareja que forma la mejor solución
     private Double mejorDistancia; // Distancia de la mejor solución
 
     private Distribution distribucion; // Distribución para generar los puntos
@@ -24,15 +24,15 @@ public class Model {
 
     // CONSTRUCTORS
     public Model() {
-        this.mejorSolucion = new Punto[2];
+        this.mejorSolucion = new Punt[2];
     }
 
-    public Model(View vista, Controller controlador, int n) {
+    public Model(Vista vista, Controller controlador, int n) {
         this.vista = vista;
         this.controlador = controlador;
         this.N = n;
         this.puntos = null;
-        this.mejorSolucion = new Punto[2];
+        this.mejorSolucion = new Punt[2];
         ANCHO = vista.getGraphWidth();
         ALTO = vista.getGraphHeight();
     }
@@ -40,7 +40,7 @@ public class Model {
     private void generarDatos() {
         ANCHO = vista.getGraphWidth();
         ALTO = vista.getGraphHeight();
-        puntos = new Punto[N];
+        puntos = new Punt[N];
         Random rnd = new Random();
         switch (this.distribucion) {
             case GAUSSIAN -> {
@@ -49,7 +49,7 @@ public class Model {
                 for (int i = 0; i < puntos.length; i++) {
                     double x = (xg[i] + 1) * ANCHO / 2;// Campana de Gauss en el centro de la ventana
                     double y = (yg[i] + 1) * ALTO / 2;
-                    puntos[i] = new Punto(x, y);
+                    puntos[i] = new Punt(x, y);
                 }
             }
             case EXPONENCIAL -> {
@@ -58,14 +58,14 @@ public class Model {
                 for (int i = 0; i < puntos.length; i++) {
                     double x = (xg[i] + 1) * ANCHO / 2;
                     double y = (yg[i] + 1) * ALTO / 2;
-                    puntos[i] = new Punto(x, y);
+                    puntos[i] = new Punt(x, y);
                 }
             }
             case UNIFORME -> {
                 for (int i = 0; i < puntos.length; i++) {
                     double x = rnd.nextDouble() * ANCHO;
                     double y = rnd.nextDouble() * ALTO;
-                    puntos[i] = new Punto(x, y);
+                    puntos[i] = new Punt(x, y);
                 }
             }
             default ->
@@ -111,14 +111,14 @@ public class Model {
      * Inicializa los atributos soluciones y distancias para
      */
     public void initSoluciones() {
-        mejorSolucion = new Punto[2];
-        mejorSolucion[0] = new Punto(0d, 0d);
-        mejorSolucion[1] = new Punto(300d, 300d);
+        mejorSolucion = new Punt[2];
+        mejorSolucion[0] = new Punt(0d, 0d);
+        mejorSolucion[1] = new Punt(300d, 300d);
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public void pushSolucion(Punto[] puntos) {
-        double distancia = Punto.distancia(puntos[0], puntos[1]);
+    public void pushSolucion(Punt[] puntos) {
+        double distancia = Punt.distancia(puntos[0], puntos[1]);
         if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
             mejorDistancia = distancia;
             mejorSolucion[0] = puntos[0];
@@ -127,11 +127,11 @@ public class Model {
     }
 
     // GETTERS & SETTERS
-    public View getVista() {
+    public Vista getVista() {
         return vista;
     }
 
-    public void setVista(View vista) {
+    public void setVista(Vista vista) {
         this.vista = vista;
     }
 
@@ -143,11 +143,11 @@ public class Model {
         this.controlador = controlador;
     }
 
-    public Punto[] getPuntos() {
+    public Punt[] getPuntos() {
         return puntos;
     }
 
-    public void setPuntos(Punto[] puntos) {
+    public void setPuntos(Punt[] puntos) {
         this.puntos = puntos;
     }
 
@@ -175,7 +175,7 @@ public class Model {
         this.metodo = metodo;
     }
 
-    public Punto[] getMejorSolucion() {
+    public Punt[] getMejorSolucion() {
         return mejorSolucion;
     }
 

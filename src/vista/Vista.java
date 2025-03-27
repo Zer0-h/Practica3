@@ -1,7 +1,7 @@
-package view;
+package vista;
 
 import model.Model;
-import controller.Controller;
+import controlador.Controller;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,9 +20,9 @@ import javax.swing.JPanel;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import model.Distribution;
 import model.Method;
-import model.Punto;
+import model.Punt;
 
-public class View extends JFrame {
+public class Vista extends JFrame {
 
     // PUNTEROS DEL PATRÓN MVC
     private Controller controlador;
@@ -38,13 +38,13 @@ public class View extends JFrame {
 
     private LeftLateralPanel leftPanel;
     private RightLateralPanel rightPanel;
-    private GraphPanel graphPanel;
+    private PanelPunts graphPanel;
 
     // CONSTRUCTORS
-    public View() {
+    public Vista() {
     }
 
-    public View(Controller controlador, Model modelo) {
+    public Vista(Controller controlador, Model modelo) {
         this.controlador = controlador;
         this.modelo = modelo;
     }
@@ -66,7 +66,7 @@ public class View extends JFrame {
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         // GRAPH PANEL
-        graphPanel = new GraphPanel(this, GraphWidth, GraphHeight);
+        graphPanel = new PanelPunts(this, GraphWidth, GraphHeight);
         this.add(graphPanel);
 
         // PANELES LATERALES
@@ -132,10 +132,7 @@ public class View extends JFrame {
 
             this.controlador.start();
 
-        } else {
-            new Notification("Por favor, Genere los Datos");
         }
-
     }
 
     protected void generatePointsClicked() {
@@ -160,7 +157,7 @@ public class View extends JFrame {
 
     public void setBestResult() {
         this.rightPanel.soluciones.removeAll();
-        Punto[] sol = this.modelo.getMejorSolucion();
+        Punt[] sol = this.modelo.getMejorSolucion();
         Double dist = this.modelo.getMejorDistancia();
 
         if (sol == null || dist == null) return;

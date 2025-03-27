@@ -1,18 +1,17 @@
-package view;
+package vista;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import model.Punto;
-public class GraphPanel extends JPanel {
+import model.Punt;
+public class PanelPunts extends JPanel {
 
-    private View vista;
+    private Vista vista;
 
-    public GraphPanel(View v, int width, int height) {
+    public PanelPunts(Vista v, int width, int height) {
         vista = v;
         Border borde = new LineBorder(Color.BLACK, 2);
         setBorder(borde);
@@ -32,11 +31,11 @@ public class GraphPanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        Punto[] puntos = vista.getModelo().getPuntos();
-        Punto[] mejor = vista.getModelo().getMejorSolucion();
+        Punt[] puntos = vista.getModelo().getPuntos();
+        Punt[] mejor = vista.getModelo().getMejorSolucion();
 
         g2d.setColor(Color.RED);
-        for (Punto p : puntos) {
+        for (Punt p : puntos) {
             g2d.drawLine((int) p.getX(), (int) p.getY(), (int) p.getX(), (int) p.getY());
         }
 
