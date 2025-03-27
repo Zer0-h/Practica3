@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import javax.swing.ImageIcon;
@@ -20,7 +21,6 @@ import javax.swing.JPanel;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import model.Distribution;
 import model.Method;
-import model.Punt;
 
 public class Vista extends JFrame {
 
@@ -157,7 +157,7 @@ public class Vista extends JFrame {
 
     public void setBestResult() {
         this.rightPanel.soluciones.removeAll();
-        Punt[] sol = this.modelo.getMejorSolucion();
+        Point2D.Double[] sol = this.modelo.getMejorSolucion();
         Double dist = this.modelo.getMejorDistancia();
 
         if (sol == null || dist == null) return;

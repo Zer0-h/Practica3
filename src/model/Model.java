@@ -2,6 +2,7 @@ package model;
 
 import vista.Vista;
 import controlador.Controller;
+import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Model {
@@ -11,8 +12,8 @@ public class Model {
     private Controller controlador;
 
     private int N; // Número de puntos
-    private Punt[] puntos; // Puntos generados según la distribución
-    private Punt[] mejorSolucion; // Pareja que forma la mejor solución
+    private Point2D.Double[] puntos; // Puntos generados según la distribución
+    private Point2D.Double[] mejorSolucion; // Pareja que forma la mejor solución
     private Double mejorDistancia; // Distancia de la mejor solución
 
     private Distribution distribucion; // Distribución para generar los puntos
@@ -24,7 +25,7 @@ public class Model {
 
     // CONSTRUCTORS
     public Model() {
-        this.mejorSolucion = new Punt[2];
+        this.mejorSolucion = new Point2D.Double[2];
     }
 
     public Model(Vista vista, Controller controlador, int n) {
@@ -32,7 +33,7 @@ public class Model {
         this.controlador = controlador;
         this.N = n;
         this.puntos = null;
-        this.mejorSolucion = new Punt[2];
+        this.mejorSolucion = new Point2D.Double[2];
         ANCHO = vista.getGraphWidth();
         ALTO = vista.getGraphHeight();
     }
@@ -40,7 +41,7 @@ public class Model {
     private void generarDatos() {
         ANCHO = vista.getGraphWidth();
         ALTO = vista.getGraphHeight();
-        puntos = new Punt[N];
+        puntos = new Point2D.Double[N];
         Random rnd = new Random();
         switch (this.distribucion) {
             case GAUSSIAN -> {
@@ -49,7 +50,7 @@ public class Model {
                 for (int i = 0; i < puntos.length; i++) {
                     double x = (xg[i] + 1) * ANCHO / 2;// Campana de Gauss en el centro de la ventana
                     double y = (yg[i] + 1) * ALTO / 2;
-                    puntos[i] = new Punt(x, y);
+                    puntos[i] = new Point2D.Double(x, y);
                 }
             }
             case EXPONENCIAL -> {
@@ -58,14 +59,14 @@ public class Model {
                 for (int i = 0; i < puntos.length; i++) {
                     double x = (xg[i] + 1) * ANCHO / 2;
                     double y = (yg[i] + 1) * ALTO / 2;
-                    puntos[i] = new Punt(x, y);
+                    puntos[i] = new Point2D.Double(x, y);
                 }
             }
             case UNIFORME -> {
                 for (int i = 0; i < puntos.length; i++) {
                     double x = rnd.nextDouble() * ANCHO;
                     double y = rnd.nextDouble() * ALTO;
-                    puntos[i] = new Punt(x, y);
+                    puntos[i] = new Point2D.Double(x, y);
                 }
             }
             default ->
@@ -111,14 +112,14 @@ public class Model {
      * Inicializa los atributos soluciones y distancias para
      */
     public void initSoluciones() {
-        mejorSolucion = new Punt[2];
-        mejorSolucion[0] = new Punt(0d, 0d);
-        mejorSolucion[1] = new Punt(300d, 300d);
+        mejorSolucion = new Point2D.Double[2];
+        mejorSolucion[0] = new Point2D.Double(0d, 0d);
+        mejorSolucion[1] = new Point2D.Double(300d, 300d);
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public void pushSolucion(Punt[] puntos) {
-        double distancia = Punt.distancia(puntos[0], puntos[1]);
+    public void pushSolucion(Point2D.Double[] puntos) {
+        double distancia = puntos[0].distance(puntos[1]);
         if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
             mejorDistancia = distancia;
             mejorSolucion[0] = puntos[0];
@@ -143,11 +144,11 @@ public class Model {
         this.controlador = controlador;
     }
 
-    public Punt[] getPuntos() {
+    public Point2D.Double[] getPuntos() {
         return puntos;
     }
 
-    public void setPuntos(Punt[] puntos) {
+    public void setPuntos(Point2D.Double[] puntos) {
         this.puntos = puntos;
     }
 
@@ -175,7 +176,7 @@ public class Model {
         this.metodo = metodo;
     }
 
-    public Punt[] getMejorSolucion() {
+    public Point2D.Double[] getMejorSolucion() {
         return mejorSolucion;
     }
 

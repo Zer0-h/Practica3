@@ -3,10 +3,10 @@ package vista;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import model.Punt;
 public class PanelPunts extends JPanel {
 
     private Vista vista;
@@ -31,11 +31,11 @@ public class PanelPunts extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        Punt[] puntos = vista.getModelo().getPuntos();
-        Punt[] mejor = vista.getModelo().getMejorSolucion();
+        Point2D.Double[] puntos = vista.getModelo().getPuntos();
+        Point2D.Double[] mejor = vista.getModelo().getMejorSolucion();
 
         g2d.setColor(Color.RED);
-        for (Punt p : puntos) {
+        for (Point2D.Double p : puntos) {
             g2d.drawLine((int) p.getX(), (int) p.getY(), (int) p.getX(), (int) p.getY());
         }
 
