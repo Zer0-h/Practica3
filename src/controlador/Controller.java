@@ -3,7 +3,6 @@ package controlador;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import model.Method;
 import model.Model;
 import vista.Vista;
@@ -59,61 +58,62 @@ public class Controller {
     private double trobarParellaDivideAndConquer(Point2D.Double[] punts, boolean minimizar) {
         // Ordenem per X abans de començar
         Arrays.sort(punts, Comparator.comparingDouble(p -> p.getX()));
-        return dc(punts, 0, punts.length - 1, minimizar);
+        return divideAndConquer(punts, 0, punts.length - 1, minimizar);
     }
 
-    private double dc(Point2D.Double[] punts, int left, int right, boolean minimizar) {
-        if (right - left <= 3) {
-            double minMax = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
+    private double divideAndConquer(Point2D.Double[] punts, int startIndex, int endIndex, boolean minimizar) {
+        if (endIndex - startIndex <= 3) {
+            double valorATornar = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
 
-            for (int i = left; i <= right; i++) {
-                for (int j = i + 1; j <= right; j++) {
+            for (int i = startIndex; i <= endIndex; i++) {
+                for (int j = i + 1; j <= endIndex; j++) {
                     double d = punts[i].distance(punts[j]);
                     Point2D.Double[] possible = {punts[i], punts[j]};
                     modelo.pushSolucion(possible);
                     if (minimizar) {
-                        minMax = Math.min(minMax, d);
+                        valorATornar = Math.min(valorATornar, d);
                     } else {
-                        minMax = Math.max(minMax, d);
+                        valorATornar = Math.max(valorATornar, d);
                     }
                 }
             }
-            return minMax;
-        }
+            return valorATornar;
+        } else {
+            int mid = (startIndex + endIndex) / 2;
+            double distanciaEsq = divideAndConquer(punts, startIndex, mid, minimizar);
+            double distanciaDreta = divideAndConquer(punts, mid + 1, endIndex, minimizar);
+            double millorDistancia = minimizar ? Math.min(distanciaEsq, distanciaDreta) : Math.max(distanciaEsq, distanciaDreta);
 
-        int mid = (left + right) / 2;
-        double dLeft = dc(punts, left, mid, minimizar);
-        double dRight = dc(punts, mid + 1, right, minimizar);
-        double d = minimizar ? Math.min(dLeft, dRight) : Math.max(dLeft, dRight);
+            double midX = punts[mid].getX();
+            Point2D.Double[] franja = new Point2D.Double[endIndex - startIndex + 1];
+            int idx = 0;
 
-        double midX = punts[mid].getX();
-        Point2D.Double[] franja = new Point2D.Double[right - left + 1];
-        int idx = 0;
-
-        for (int i = left; i <= right; i++) {
-            if (Math.abs(punts[i].getX() - midX) < d) {
-                franja[idx++] = punts[i];
-            }
-        }
-
-        Arrays.sort(franja, 0, idx, Comparator.comparingDouble(p -> p.getY()));
-
-        for (int i = 0; i < idx; i++) {
-            for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < d; j++) {
-                double dist = franja[i].distance(franja[j]);
-                Point2D.Double[] possible = {franja[i], franja[j]};
-                modelo.pushSolucion(possible);
-                if (minimizar) {
-                    d = Math.min(d, dist);
-                } else {
-                    d = Math.max(d, dist);
+            for (int i = startIndex; i <= endIndex; i++) {
+                if (Math.abs(punts[i].getX() - midX) < millorDistancia) {
+                    franja[idx++] = punts[i];
                 }
             }
+
+            // Mirar si esto seria necesario
+            Arrays.sort(franja, 0, idx, Comparator.comparingDouble(p -> p.getY()));
+
+            for (int i = 0; i < idx; i++) {
+                for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < millorDistancia; j++) {
+                    double dist = franja[i].distance(franja[j]);
+                    Point2D.Double[] possible = {franja[i], franja[j]};
+                    modelo.pushSolucion(possible);
+                    if (minimizar) {
+                        millorDistancia = Math.min(millorDistancia, dist);
+                    } else {
+                        millorDistancia = Math.max(millorDistancia, dist);
+                    }
+                }
+            }
+
+            return millorDistancia;
         }
 
-        return d;
     }
-
 
     public Model getModelo() {
         return modelo;
