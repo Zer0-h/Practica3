@@ -1,10 +1,10 @@
-package algoritmosavanzadosp3;
+package main;
 
 import controlador.Controller;
 import model.Model;
 import vista.Vista;
 
-public class AlgoritmosAvanzadosP3 {
+public class main {
 
     public static void main(String[] args) {
         MVCInit();
