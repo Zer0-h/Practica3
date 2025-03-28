@@ -21,11 +21,12 @@ public class Model {
     private boolean minimizar; // Opción para minimizar o maximizar la distáncia entre puntos
     private int ANCHO; // Ancho de la ventana
     private int ALTO; // Alto de la ventana
-
+    private long temps;
 
     // CONSTRUCTORS
     public Model() {
         this.mejorSolucion = new Point2D.Double[2];
+        temps = 0;
     }
 
     public Model(Vista vista, Controller controlador, int n) {
@@ -36,6 +37,7 @@ public class Model {
         this.mejorSolucion = new Point2D.Double[2];
         ANCHO = vista.getGraphWidth();
         ALTO = vista.getGraphHeight();
+        temps = 0;
     }
 
     private void generarDatos() {
@@ -142,6 +144,14 @@ public class Model {
 
     public void setControlador(Controller controlador) {
         this.controlador = controlador;
+    }
+
+    public void setTemps(long value) {
+        temps = value;
+    }
+
+    public long getTemps() {
+        return temps;
     }
 
     public Point2D.Double[] getPuntos() {

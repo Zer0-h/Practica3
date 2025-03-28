@@ -12,125 +12,86 @@ import javax.swing.border.LineBorder;
 import model.Distribution;
 import model.Method;
 
-/**
- * Panel lateral izquierdo de la ventana principal.
- */
 public class LeftLateralPanel extends JPanel {
 
     private Vista vista;
 
-    private JComboBox distribution;
-    private JComboBox proximity;
-    private JComboBox solution;
-    private JComboBox quantityPoints;
-
+    private JComboBox<Distribution> distribution;
+    private JComboBox<String> proximity;
+    private JComboBox<Method> method;
+    private JComboBox<String> quantityPoints;
     private JButton generateB;
 
-    private int x, y, width, height;
-
-    /**
-     * Panel Lateral izquierdo encargado de la configuración del algoritmo y los
-     * datos de la aplicación
-     */
     public LeftLateralPanel(Vista v) {
         this.vista = v;
-        this.init();
+        init();
     }
 
-    /**
-     * Método encargado de la inicialización del JPanel y todos los componentes
-     * que lo componen (JLabels, JComboBoxs y otros JPanels)
-     */
     private void init() {
-        this.setLayout(null);
+        setLayout(null);
+        int width = vista.MARGENLAT - 20;
+        int height = vista.getHeight() - vista.MARGENVER - 40;
+        setBounds(10, vista.MARGENVER, width, height);
+        setBackground(new Color(200, 220, 255));
+        setBorder(new LineBorder(Color.BLACK, 2));
 
-        this.x = 10;
-        this.y = this.vista.MARGENVER;
-        this.width = this.vista.MARGENLAT - 20;
-        this.height = this.vista.getHeight() - this.vista.MARGENVER - 40;
-
-        this.setBounds(x, y, width, height);
-        this.setBackground(Color.CYAN);
-
-        this.setBorder(new LineBorder(Color.BLACK, 2));
-
-        // TIPO DE DISTRIBUCIÓN
-        JLabel distributionLabel = new JLabel("Tipo de Distribución:");
-        distributionLabel.setLayout(null);
+        JLabel distributionLabel = new JLabel("Distribució de punts:");
         distributionLabel.setBounds(10, 10, width - 20, 30);
-        this.add(distributionLabel);
+        add(distributionLabel);
 
-        this.distribution = new JComboBox<>(model.Distribution.values());
-        this.distribution.setLayout(null);
-        this.distribution.setBounds(10, 40,
-                width - 20, 30);
-        this.add(distribution);
+        distribution = new JComboBox<>(Distribution.values());
+        distribution.setBounds(10, 40, width - 20, 30);
+        add(distribution);
 
-        // TIPO DE PROXiMIDAD (Parejas Lejanas o Cercanas)
-        JLabel proximityLabel = new JLabel("Proximidad:");
-        proximityLabel.setLayout(null);
+        JLabel proximityLabel = new JLabel("Proximitat (Cerca/Lejos):");
         proximityLabel.setBounds(10, 80, width - 20, 30);
-        this.add(proximityLabel);
+        add(proximityLabel);
 
-        this.proximity = new JComboBox<>(new String[]{"Cerca", "Lejos"});
-        this.proximity.setLayout(null);
-        this.proximity.setBounds(10, 110, width - 20, 30);
-        this.add(proximity);
+        proximity = new JComboBox<>(new String[]{"Cerca", "Lejos"});
+        proximity.setBounds(10, 110, width - 20, 30);
+        add(proximity);
 
-        // TIPO DE APROXIMACIÓN A LA SOLUCION
-        JLabel solutionLabel = new JLabel("Tipo de Solución:");
-        solutionLabel.setLayout(null);
-        solutionLabel.setBounds(10, 200, width - 20, 30);
-        this.add(solutionLabel);
+        JLabel methodLabel = new JLabel("Mètode de càlcul:");
+        methodLabel.setBounds(10, 150, width - 20, 30);
+        add(methodLabel);
 
-        this.solution = new JComboBox<>(model.Method.values());
-        this.solution.setLayout(null);
-        this.solution.setBounds(10, 230, width - 20, 30);
-        this.add(solution);
+        method = new JComboBox<>(Method.values());
+        method.setBounds(10, 180, width - 20, 30);
+        add(method);
 
-        // CANTIDAD DE PUNTOS (N)
-        JLabel quantityPointsLabel = new JLabel("Cantidad de Puntos:");
-        quantityPointsLabel.setLayout(null);
-        quantityPointsLabel.setBounds(10, 270, width - 20, 30);
-        this.add(quantityPointsLabel);
+        JLabel quantityPointsLabel = new JLabel("Nombre de punts:");
+        quantityPointsLabel.setBounds(10, 220, width - 20, 30);
+        add(quantityPointsLabel);
 
-        this.quantityPoints = new JComboBox<>(new String[]{"1000", "10000", "100000", "1000000", "2500000", "5000000", "7500000", "10000000"});
-        this.quantityPoints.setLayout(null);
-        this.quantityPoints.setBounds(10, 300, width - 20, 30);
-        this.add(quantityPoints);
+        quantityPoints = new JComboBox<>(new String[]{"1000", "10000", "100000", "1000000", "2500000", "5000000"});
+        quantityPoints.setBounds(10, 250, width - 20, 30);
+        add(quantityPoints);
 
-        // GENERATE BUTTON
-        this.generateB = new JButton("Generar Puntos");
-        this.generateB.setLayout(null);
-        this.generateB.setBounds(10, height - 100, width - 20, 90);
-        this.add(generateB);
+        generateB = new JButton("Generar punts");
+        generateB.setBounds(10, height - 100, width - 20, 40);
+        add(generateB);
 
         generateB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 vista.generatePointsClicked();
             }
-
         });
-
-        this.setVisible(true);
-
     }
 
-    // GETTERS
-    protected Distribution getDistribution() {
-        return Distribution.valueOf(this.distribution.getSelectedItem().toString());
+    public Distribution getDistribution() {
+        return (Distribution) distribution.getSelectedItem();
     }
 
-    protected String getProximity() {
-        return this.proximity.getSelectedItem().toString();
+    public String getProximity() {
+        return (String) proximity.getSelectedItem();
     }
 
-    protected int getQuantityPoints() {
-        return Integer.parseInt(this.quantityPoints.getSelectedItem().toString());
+    public int getQuantityPoints() {
+        return Integer.parseInt((String) quantityPoints.getSelectedItem());
     }
 
-    protected Method getSolution() {
-        return Method.valueOf(this.solution.getSelectedItem().toString());
+    public Method getMethod() {
+        return (Method) method.getSelectedItem();
     }
 }

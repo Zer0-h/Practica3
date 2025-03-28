@@ -30,33 +30,27 @@ public class RightLateralPanel extends JPanel {
         this.height = this.vista.getHeight() - this.vista.MARGENVER - 40;
 
         this.setBounds(x, y, width, height);
-        this.setBackground(Color.red);
+        this.setBackground(new Color(255, 200, 200));
         this.setBorder(new LineBorder(Color.BLACK, 2));
 
-        // TIPO DE DISTRIBUCIÓN
-        JLabel timeLabel = new JLabel("Tiempo de Ejecución (ns)");
-        timeLabel.setLayout(null);
+        JLabel timeLabel = new JLabel("Temps d'execució (ns):");
         timeLabel.setBounds(10, 10, width - 10, 30);
         this.add(timeLabel);
 
         timePanel = new TimePanel(10, 50, width - 20, 30);
         this.add(timePanel);
 
-        // START BUTTON
-        this.startB = new JButton("Start");
-        this.startB.setLayout(null);
-        this.startB.setBounds(10, height - 100, width - 20, 90);
+        startB = new JButton("Iniciar càlcul");
+        startB.setBounds(10, height - 100, width - 20, 40);
         this.add(startB);
 
-        // SOLUCIONES
-        JLabel resultLabel = new JLabel("Distancias solución/es");
-        resultLabel.setLayout(null);
-        resultLabel.setBounds(10, this.getHeight() / 4 - 40, width - 10, 30);
+        JLabel resultLabel = new JLabel("Millor solució trobada:");
+        resultLabel.setBounds(10, 100, width - 10, 30);
         this.add(resultLabel);
 
         soluciones = new JPanel();
         soluciones.setLayout(null);
-        soluciones.setBounds(10, this.getHeight() / 3 - 50, width - 20, 252);
+        soluciones.setBounds(10, 130, width - 20, 140);
         this.add(soluciones);
 
         startB.addActionListener(new ActionListener() {
@@ -64,7 +58,6 @@ public class RightLateralPanel extends JPanel {
             public void actionPerformed(ActionEvent ae) {
                 vista.startClicked();
             }
-
         });
 
         this.setVisible(true);
@@ -76,13 +69,8 @@ public class RightLateralPanel extends JPanel {
 
         private TimePanel(int x, int y, int width, int height) {
             this.setBounds(x, y, width, height);
-
             this.timeLabel = new JLabel("");
             this.add(timeLabel);
-        }
-
-        public String getTime() {
-            return this.timeLabel.getText();
         }
 
         public void setTime(long nanoseconds) {
@@ -93,5 +81,4 @@ public class RightLateralPanel extends JPanel {
     public void setTime(long nanoseconds) {
         this.timePanel.setTime(nanoseconds);
     }
-
 }
