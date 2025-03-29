@@ -5,43 +5,62 @@ import model.Method;
 import model.Model;
 import vista.Vista;
 
-public class Controller {
+public class Controller implements Notificar{
 
-    private Model modelo;
+    private Model model;
     private Vista vista;
 
     public Controller() {
     }
 
     public Controller(Model modelo, Vista vista) {
-        this.modelo = modelo;
+        this.model = modelo;
         this.vista = vista;
     }
 
-    public void start() {
-        Point2D.Double[] puntos = modelo.getPuntos();
-        Method metodo = modelo.getMetodo();
-        boolean minimizar = modelo.isMinimizar();
+    public static void main(String[] args) {
+        new Controller().iniciar();
+    }
+
+    public void iniciar() {
+        model = new Model();
+        vista = new Vista(this);
+
+        model.setVista(vista);
+        model.setControlador(this);
+
+        vista.setModelo(model);
+        vista.setControlador(this);
+
+        vista.mostrar();
+    }
+
+    public void iniciarProces() {
+        Point2D.Double[] puntos = model.getPuntos();
+        Method metodo = model.getMetodo();
+        boolean minimizar = model.isMinimizar();
 
         // Inicializamos el array de soluciones
-        modelo.initSoluciones();
-        modelo.iniciarCalculConcurrent(metodo, puntos, minimizar);
+        model.initSoluciones();
+        model.iniciarCalculConcurrent(metodo, puntos, minimizar);
     }
 
     public Model getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(Model modelo) {
-        this.modelo = modelo;
+        return model;
     }
 
     public Vista getVista() {
         return vista;
     }
 
-    public void setVista(Vista vista) {
-        this.vista = vista;
+    @Override
+    public void notificar(Notificacio n) {
+        switch (n) {
+            case Notificacio.ARRANCAR ->
+                iniciarProces();
+            case Notificacio.PINTAR ->
+                System.out.println("XD");
+        }
     }
 
 }

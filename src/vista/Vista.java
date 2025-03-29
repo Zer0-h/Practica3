@@ -2,6 +2,8 @@ package vista;
 
 import model.Model;
 import controlador.Controller;
+import controlador.Notificacio;
+import controlador.Notificar;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -11,7 +13,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import model.Distribution;
 import model.Method;
 
-public class Vista extends JFrame {
+public class Vista extends JFrame implements Notificar {
 
     private Controller controlador;
     private Model modelo;
@@ -23,9 +25,9 @@ public class Vista extends JFrame {
 
     public Vista() {}
 
-    public Vista(Controller controlador, Model modelo) {
+    public Vista(Controller controlador) {
         this.controlador = controlador;
-        this.modelo = modelo;
+        this.modelo = controlador.getModelo();
     }
 
     public void mostrar() {
@@ -88,7 +90,7 @@ public class Vista extends JFrame {
             modelo.setMinimizar(proximity.equals("Cerca"));
             modelo.setMetodo(typeSolution);
 
-            controlador.start();
+            controlador.notificar(Notificacio.ARRANCAR);
         }
     }
 
@@ -97,5 +99,10 @@ public class Vista extends JFrame {
         int n = topPanel.getQuantityPoints();
         modelo.reset(distribution, n);
         paintGraph();
+    }
+
+    @Override
+    public void notificar(Notificacio notificacio) {
+        System.out.println("XDD");
     }
 }
