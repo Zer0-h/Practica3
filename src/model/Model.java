@@ -35,14 +35,15 @@ public class Model {
         this.N = n;
         this.puntos = null;
         this.mejorSolucion = new Point2D.Double[2];
-        ANCHO = vista.getGraphWidth();
-        ALTO = vista.getGraphHeight();
         temps = 0;
     }
 
+    public void setPanelSize(int width, int height) {
+        ANCHO = width;
+        ALTO = height;
+    }
+
     private void generarDatos() {
-        ANCHO = vista.getGraphWidth();
-        ALTO = vista.getGraphHeight();
         puntos = new Point2D.Double[N];
         Random rnd = new Random();
         switch (this.distribucion) {

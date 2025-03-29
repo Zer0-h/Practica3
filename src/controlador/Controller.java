@@ -52,7 +52,6 @@ public class Controller {
                 modelo.pushSolucion(posibleSolucion);
             }
         }
-
     }
 
     private double trobarParellaDivideAndConquer(Point2D.Double[] punts, boolean minimizar) {
