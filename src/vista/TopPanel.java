@@ -11,7 +11,7 @@ import model.Method;
 
 public class TopPanel extends JPanel {
 
-    private Vista vista;
+    private final Vista vista;
 
     private JComboBox<Distribution> distribution;
     private JComboBox<String> proximity;

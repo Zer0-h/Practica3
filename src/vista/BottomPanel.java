@@ -7,8 +7,8 @@ import java.awt.geom.Point2D;
 
 public class BottomPanel extends JPanel {
 
-    private JLabel timeLabel;
-    private JTextArea resultArea;
+    private final JLabel timeLabel;
+    private final JTextArea resultArea;
 
     public BottomPanel(Vista vista) {
         setLayout(new BorderLayout());

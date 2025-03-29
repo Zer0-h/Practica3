@@ -1,37 +1,37 @@
 package model;
+import controlador.Controlador;
+import controlador.Notificacio;
 import java.awt.geom.Point2D;
-import vista.Vista;
 
 public class BruteForceProcess extends Thread {
-    private final Point2D.Double[] punts;
-    private final Model modelo;
-    private final Vista vista;
+    private final Controlador controlador;
 
-    public BruteForceProcess(Point2D.Double[] punts, Model modelo, Vista vista) {
-        this.punts = punts;
-        this.modelo = modelo;
-        this.vista = vista;
+    public BruteForceProcess(Controlador c) {
+        controlador = c;
     }
 
     @Override
     public void run() {
+        Model model = controlador.getModelo();
+
         long tiempoI = System.nanoTime();
-        calcularBruteFroce();
+        calcularBruteFroce(model);
 
         long tempsExecucio = System.nanoTime() - tiempoI;
-        this.vista.setTime(tempsExecucio / 1_000_000_000.0);
-        this.vista.setBestResult();
-        this.vista.paintGraph();
 
-        //modelo.setBestDistance(millorDistancia);
+        model.setTemps(tempsExecucio / 1_000_000_000.0);
+
+        controlador.notificar(Notificacio.FINALITZA);
     }
 
-    private void calcularBruteFroce() {
+    private void calcularBruteFroce(Model model) {
         double millorDistancia = Double.MAX_VALUE;
+        Point2D.Double[] punts = model.getPuntos();
+
         for (int i = 0; i < punts.length; i++) {
             for (int j = i + 1; j < punts.length; j++) {
                 double distancia = punts[i].distance(punts[j]);
-                modelo.pushSolucion(punts[i], punts[j]);
+                model.pushSolucion(punts[i], punts[j]);
                 millorDistancia = Math.min(millorDistancia, distancia);
             }
         }

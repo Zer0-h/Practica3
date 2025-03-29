@@ -1,13 +1,10 @@
 package vista;
 
 import model.Model;
-import controlador.Controller;
+import controlador.Controlador;
 import controlador.Notificacio;
 import controlador.Notificar;
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
 import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import model.Distribution;
@@ -15,7 +12,7 @@ import model.Method;
 
 public class Vista extends JFrame implements Notificar {
 
-    private Controller controlador;
+    private Controlador controlador;
     private Model modelo;
 
     // Panells
@@ -25,13 +22,13 @@ public class Vista extends JFrame implements Notificar {
 
     public Vista() {}
 
-    public Vista(Controller controlador) {
+    public Vista(Controlador controlador) {
         this.controlador = controlador;
         this.modelo = controlador.getModelo();
     }
 
     public void mostrar() {
-        setTitle("Pràctica 3 - Algorismes Avançats");
+        setTitle("Pràctica 3 - Divideix i Venceràs");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setSize(1000, 900);
@@ -58,28 +55,12 @@ public class Vista extends JFrame implements Notificar {
         graphPanel.repaint();
     }
 
-    public void setTime(double seconds) {
-        bottomPanel.setTime(seconds);
-    }
-
     public void setBestResult() {
-        bottomPanel.displayBestResult(modelo.getMejorSolucion(), modelo.getMejorDistancia());
-    }
-
-    public Controller getControlador() {
-        return controlador;
+        bottomPanel.displayBestResult(modelo.getPuntsSolucio(), modelo.getMejorDistancia());
     }
 
     public Model getModelo() {
         return modelo;
-    }
-
-    public void setControlador(Controller controlador) {
-        this.controlador = controlador;
-    }
-
-    public void setModelo(Model modelo) {
-        this.modelo = modelo;
     }
 
     protected void startClicked() {
@@ -101,8 +82,17 @@ public class Vista extends JFrame implements Notificar {
         paintGraph();
     }
 
+    private void finalitza() {
+        bottomPanel.setTime(this.modelo.getTemps());
+        setBestResult();
+        paintGraph();
+    }
+
     @Override
-    public void notificar(Notificacio notificacio) {
-        System.out.println("XDD");
+    public void notificar(Notificacio n) {
+        switch (n) {
+            case Notificacio.FINALITZA ->
+                finalitza();
+        }
     }
 }

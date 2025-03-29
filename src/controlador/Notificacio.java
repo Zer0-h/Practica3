@@ -8,7 +8,6 @@ package controlador;
  * @author tonitorres
  */
 public enum Notificacio {
-
     ARRANCAR,
-    PINTAR,
+    FINALITZA,
 }

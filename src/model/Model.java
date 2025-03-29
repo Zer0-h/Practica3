@@ -1,19 +1,14 @@
 package model;
 
 import vista.Vista;
-import controlador.Controller;
+import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Model {
-
-    // PUNTEROS DEL PATRÓN MVC
-    private Vista vista;
-    private Controller controlador;
-
     private int N; // Número de puntos
     private Point2D.Double[] puntos; // Puntos generados según la distribución
-    private Point2D.Double[] mejorSolucion; // Pareja que forma la mejor solución
+    private Point2D.Double[] puntsSolucio; // Pareja que forma la mejor solución
     private Double mejorDistancia; // Distancia de la mejor solución
 
     private Distribution distribucion; // Distribución para generar los puntos
@@ -21,20 +16,18 @@ public class Model {
     private boolean minimizar; // Opción para minimizar o maximizar la distáncia entre puntos
     private int ANCHO; // Ancho de la ventana
     private int ALTO; // Alto de la ventana
-    private long temps;
+    private double temps;
 
     // CONSTRUCTORS
     public Model() {
-        this.mejorSolucion = new Point2D.Double[2];
+        this.puntsSolucio = new Point2D.Double[2];
         temps = 0;
     }
 
-    public Model(Vista vista, Controller controlador, int n) {
-        this.vista = vista;
-        this.controlador = controlador;
+    public Model(int n) {
         this.N = n;
         this.puntos = null;
-        this.mejorSolucion = new Point2D.Double[2];
+        this.puntsSolucio = new Point2D.Double[2];
         temps = 0;
     }
 
@@ -72,16 +65,6 @@ public class Model {
         }
     }
 
-    public void iniciarCalculConcurrent(Method metode, Point2D.Double[] punts, boolean minimizar) {
-        Thread calculator;
-        if (metode == Method.FUERZA_BRUTA) {
-            calculator = new BruteForceProcess(punts, this, this.vista);
-        } else {
-            calculator = new DivideAndConquerProcess(punts, minimizar, this, this.vista);
-        }
-        calculator.start();
-    }
-
     private double generateGaussianValue(Random rnd, int max) {
         double value;
 
@@ -104,9 +87,9 @@ public class Model {
      * Inicializa los atributos soluciones y distancias para
      */
     public void initSoluciones() {
-        mejorSolucion = new Point2D.Double[2];
-        mejorSolucion[0] = new Point2D.Double(0d, 0d);
-        mejorSolucion[1] = new Point2D.Double(300d, 300d);
+        puntsSolucio = new Point2D.Double[2];
+        puntsSolucio[0] = new Point2D.Double(0d, 0d);
+        puntsSolucio[1] = new Point2D.Double(300d, 300d);
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
@@ -114,33 +97,16 @@ public class Model {
         double distancia = punt1.distance(punt2);
         if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
             mejorDistancia = distancia;
-            mejorSolucion[0] = punt1;
-            mejorSolucion[1] = punt2;
+            puntsSolucio[0] = punt1;
+            puntsSolucio[1] = punt2;
         }
     }
 
-    // GETTERS & SETTERS
-    public Vista getVista() {
-        return vista;
-    }
-
-    public void setVista(Vista vista) {
-        this.vista = vista;
-    }
-
-    public Controller getControlador() {
-        return controlador;
-    }
-
-    public void setControlador(Controller controlador) {
-        this.controlador = controlador;
-    }
-
-    public void setTemps(long value) {
+    public void setTemps(double value) {
         temps = value;
     }
 
-    public long getTemps() {
+    public double getTemps() {
         return temps;
     }
 
@@ -176,8 +142,8 @@ public class Model {
         this.metodo = metodo;
     }
 
-    public Point2D.Double[] getMejorSolucion() {
-        return mejorSolucion;
+    public Point2D.Double[] getPuntsSolucio() {
+        return puntsSolucio;
     }
 
     public Double getMejorDistancia() {
@@ -187,7 +153,7 @@ public class Model {
     public void reset(Distribution distribution, int n) {
         this.distribucion = distribution;
         this.N = n;
-        this.mejorSolucion = null;
+        this.puntsSolucio = null;
         this.mejorDistancia = null;
         this.generarDatos();
     }

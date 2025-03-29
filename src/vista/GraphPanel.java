@@ -21,7 +21,7 @@ public class GraphPanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g;
         Point2D.Double[] puntos = vista.getModelo().getPuntos();
-        Point2D.Double[] mejor = vista.getModelo().getMejorSolucion();
+        Point2D.Double[] mejor = vista.getModelo().getPuntsSolucio();
 
         g2d.setColor(Color.RED);
         for (Point2D.Double p : puntos) {

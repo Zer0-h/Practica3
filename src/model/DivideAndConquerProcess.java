@@ -1,47 +1,45 @@
 package model;
+import controlador.Controlador;
+import controlador.Notificacio;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
 import vista.Vista;
 
 public class DivideAndConquerProcess extends Thread {
-    private final Point2D.Double[] punts;
-    private final boolean minimizar;
-    private final Model modelo;
-    private final Vista vista;
+    private final Controlador controlador;
+    private final Model model;
 
-    public DivideAndConquerProcess(Point2D.Double[] punts, boolean minimizar, Model modelo, Vista vista) {
-        this.punts = punts;
-        this.minimizar = minimizar;
-        this.modelo = modelo;
-        this.vista = vista;
-    }
+    public DivideAndConquerProcess(Controlador c) {
+        this.controlador = c;
+        this.model = c.getModelo();
+     }
 
     @Override
     public void run() {
         // Ordenem per X abans de començar
         long tiempoI = System.nanoTime();
 
+        Point2D.Double[] punts = model.getPuntos();
+
         Arrays.sort(punts, Comparator.comparingDouble(Point2D.Double::getX));
-        divideAndConquer(punts, 0, punts.length - 1, minimizar);
+        divideAndConquer(punts, 0, punts.length - 1);
 
         long tempsExecucio = System.nanoTime() - tiempoI;
-        this.vista.setTime(tempsExecucio / 1_000_000_000.0);
-        this.vista.setBestResult();
-        this.vista.paintGraph();
+        model.setTemps(tempsExecucio / 1_000_000_000.0);
 
-        //modelo(millorDistancia);
+        controlador.notificar(Notificacio.FINALITZA);
     }
 
-    private double divideAndConquer(Point2D.Double[] punts, int start, int end, boolean minimizar) {
+    private double divideAndConquer(Point2D.Double[] punts, int start, int end) {
         if (end - start <= 3) {
-            double valorATornar = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
+            double valorATornar = model.isMinimizar() ? Double.MAX_VALUE : Double.MIN_VALUE;
 
             for (int i = start; i <= end; i++) {
                 for (int j = i + 1; j <= end; j++) {
                     double d = punts[i].distance(punts[j]);
-                    modelo.pushSolucion(punts[i], punts[j]);
-                    if (minimizar) {
+                    model.pushSolucion(punts[i], punts[j]);
+                    if (model.isMinimizar()) {
                         valorATornar = Math.min(valorATornar, d);
                     } else {
                         valorATornar = Math.max(valorATornar, d);
@@ -51,9 +49,9 @@ public class DivideAndConquerProcess extends Thread {
             return valorATornar;
         } else {
             int mid = (start + end) / 2;
-            double distanciaEsq = divideAndConquer(punts, start, mid, minimizar);
-            double distanciaDreta = divideAndConquer(punts, mid + 1, end, minimizar);
-            double millorDistancia = minimizar ? Math.min(distanciaEsq, distanciaDreta) : Math.max(distanciaEsq, distanciaDreta);
+            double distanciaEsq = divideAndConquer(punts, start, mid);
+            double distanciaDreta = divideAndConquer(punts, mid + 1, end);
+            double millorDistancia = model.isMinimizar() ? Math.min(distanciaEsq, distanciaDreta) : Math.max(distanciaEsq, distanciaDreta);
 
             double midX = punts[mid].getX();
             Point2D.Double[] franja = new Point2D.Double[end - start + 1];
@@ -70,8 +68,8 @@ public class DivideAndConquerProcess extends Thread {
             for (int i = 0; i < idx; i++) {
                 for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < millorDistancia; j++) {
                     double dist = franja[i].distance(franja[j]);
-                    modelo.pushSolucion(franja[i], franja[j]);
-                    if (minimizar) {
+                    model.pushSolucion(franja[i], franja[j]);
+                    if (model.isMinimizar()) {
                         millorDistancia = Math.min(millorDistancia, dist);
                     } else {
                         millorDistancia = Math.max(millorDistancia, dist);
