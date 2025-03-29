@@ -70,8 +70,16 @@ public class Model {
             }
             default -> throw new AssertionError();
         }
+    }
 
-        verificarDistribucions();
+    public void iniciarCalculConcurrent(Method metode, Point2D.Double[] punts, boolean minimizar) {
+        Thread calculator;
+        if (metode == Method.FUERZA_BRUTA) {
+            calculator = new BruteForceProcess(punts, this, this.vista);
+        } else {
+            calculator = new DivideAndConquerProcess(punts, minimizar, this, this.vista);
+        }
+        calculator.start();
     }
 
     private double generateGaussianValue(Random rnd, int max) {
@@ -82,27 +90,6 @@ public class Model {
         } while (value > max || value < 0);
         return value;
     }
-
-    public void verificarDistribucions() {
-        boolean correcte = true;
-
-        for (Point2D.Double punt : puntos) {
-            double x = punt.getX();
-            double y = punt.getY();
-
-            if (x < 0 || x > ANCHO || y < 0 || y > ALTO) {
-                System.out.println("ERROR: Punt fora de límits -> x: " + x + ", y: " + y);
-                correcte = false;
-            }
-        }
-
-        if (correcte) {
-            System.out.println("Tots els punts estan dins dels límits correctament.");
-        } else {
-            System.out.println("Hi ha punts fora dels límits.");
-        }
-    }
-
 
     private double generateExponentialValue(Random rnd, int max) {
         double lambda = 2.0 / max;  // Scale to have mean X/2
@@ -208,5 +195,6 @@ public class Model {
     public boolean exists() {
         return this.puntos != null;
     }
+
 
 }
