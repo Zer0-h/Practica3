@@ -38,7 +38,9 @@ public class Controller {
             default ->
                 throw new AssertionError();
         }
-        this.vista.setTime(System.nanoTime() - tiempoI);
+
+        long tempsExecucio = System.nanoTime() - tiempoI;
+        this.vista.setTime(tempsExecucio / 1_000_000_000.0);
         this.vista.setBestResult();
         this.vista.paintGraph();
     }
@@ -48,8 +50,7 @@ public class Controller {
         for (int i = 0; i < puntos.length; i++) {
             for (int j = i + 1; j < puntos.length; j++) {
                 // Comprobamos si es solución y la guardamos
-                Point2D.Double[] posibleSolucion = {puntos[i], puntos[j]};
-                modelo.pushSolucion(posibleSolucion);
+                modelo.pushSolucion(puntos[i], puntos[j]);
             }
         }
     }
@@ -67,8 +68,7 @@ public class Controller {
             for (int i = startIndex; i <= endIndex; i++) {
                 for (int j = i + 1; j <= endIndex; j++) {
                     double d = punts[i].distance(punts[j]);
-                    Point2D.Double[] possible = {punts[i], punts[j]};
-                    modelo.pushSolucion(possible);
+                    modelo.pushSolucion(punts[i], punts[j]);
                     if (minimizar) {
                         valorATornar = Math.min(valorATornar, d);
                     } else {
@@ -99,8 +99,7 @@ public class Controller {
             for (int i = 0; i < idx; i++) {
                 for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < millorDistancia; j++) {
                     double dist = franja[i].distance(franja[j]);
-                    Point2D.Double[] possible = {franja[i], franja[j]};
-                    modelo.pushSolucion(possible);
+                    modelo.pushSolucion(franja[i], franja[j]);
                     if (minimizar) {
                         millorDistancia = Math.min(millorDistancia, dist);
                     } else {

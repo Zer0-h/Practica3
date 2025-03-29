@@ -48,20 +48,16 @@ public class Model {
         Random rnd = new Random();
         switch (this.distribucion) {
             case GAUSSIAN -> {
-                double[] xg = distribucioGaussiana(N);
-                double[] yg = distribucioGaussiana(N);
                 for (int i = 0; i < puntos.length; i++) {
-                    double x = (xg[i] + 1) * ANCHO / 2;// Campana de Gauss en el centro de la ventana
-                    double y = (yg[i] + 1) * ALTO / 2;
+                    double x = generateGaussianValue(rnd, ANCHO);
+                    double y = generateGaussianValue(rnd, ALTO);
                     puntos[i] = new Point2D.Double(x, y);
                 }
             }
             case EXPONENCIAL -> {
-                double[] xg = distribucioExponencial(N);
-                double[] yg = distribucioExponencial(N);
                 for (int i = 0; i < puntos.length; i++) {
-                    double x = (xg[i] + 1) * ANCHO / 2;
-                    double y = (yg[i] + 1) * ALTO / 2;
+                    double x = generateExponentialValue(rnd, ANCHO);
+                    double y = generateExponentialValue(rnd, ALTO);
                     puntos[i] = new Point2D.Double(x, y);
                 }
             }
@@ -72,43 +68,49 @@ public class Model {
                     puntos[i] = new Point2D.Double(x, y);
                 }
             }
-            default ->
-                throw new AssertionError();
+            default -> throw new AssertionError();
+        }
+
+        verificarDistribucions();
+    }
+
+    private double generateGaussianValue(Random rnd, int max) {
+        double value;
+
+        do {
+            value = rnd.nextGaussian(max / 2, max / 6);
+        } while (value > max || value < 0);
+        return value;
+    }
+
+    public void verificarDistribucions() {
+        boolean correcte = true;
+
+        for (Point2D.Double punt : puntos) {
+            double x = punt.getX();
+            double y = punt.getY();
+
+            if (x < 0 || x > ANCHO || y < 0 || y > ALTO) {
+                System.out.println("ERROR: Punt fora de límits -> x: " + x + ", y: " + y);
+                correcte = false;
+            }
+        }
+
+        if (correcte) {
+            System.out.println("Tots els punts estan dins dels límits correctament.");
+        } else {
+            System.out.println("Hi ha punts fora dels límits.");
         }
     }
 
-    private double[] distribucioGaussiana(int n) {
-        Random rand = new Random();
-        double[] v = new double[n];
-        double maxAbs = 0;
-        for (int i = 0; i < v.length; i++) {
-            v[i] = rand.nextGaussian();
-            if (Math.abs(v[i]) > maxAbs) {
-                maxAbs = Math.abs(v[i]);
-            }
-        }
-        for (int i = 0; i < v.length; i++) {
-            v[i] = v[i] / maxAbs;
-        }
-        return v;
-    }
 
-    private double[] distribucioExponencial(int n) {
-        Random rand = new Random();
-        double[] v = new double[n];
-        double max = 0;
-        for (int i = 0; i < n; i++) {
-            double u = rand.nextDouble(); // U(0,1)
-            v[i] = -Math.log(1 - u); // Exponencial(1)
-            if (v[i] > max) {
-                max = v[i];
-            }
-        }
-        // Normalitzem a l'interval [-1, 1]
-        for (int i = 0; i < n; i++) {
-            v[i] = (v[i] / max) * 2 - 1;
-        }
-        return v;
+    private double generateExponentialValue(Random rnd, int max) {
+        double lambda = 2.0 / max;  // Scale to have mean X/2
+        double value;
+        do {
+            value = -Math.log(1 - rnd.nextDouble()) / lambda;
+        } while (value > max);
+        return value;
     }
 
     /**
@@ -121,12 +123,12 @@ public class Model {
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public void pushSolucion(Point2D.Double[] puntos) {
-        double distancia = puntos[0].distance(puntos[1]);
+    public void pushSolucion(Point2D.Double punt1, Point2D.Double punt2) {
+        double distancia = punt1.distance(punt2);
         if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
             mejorDistancia = distancia;
-            mejorSolucion[0] = puntos[0];
-            mejorSolucion[1] = puntos[1];
+            mejorSolucion[0] = punt1;
+            mejorSolucion[1] = punt2;
         }
     }
 

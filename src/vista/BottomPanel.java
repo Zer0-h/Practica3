@@ -20,8 +20,8 @@ public class BottomPanel extends JPanel {
         add(new JScrollPane(resultArea), BorderLayout.CENTER);
     }
 
-    public void setTime(long nanoseconds) {
-        timeLabel.setText("Temps: " + nanoseconds + " ns");
+    public void setTime(double seconds) {
+        timeLabel.setText(String.format("Temps %.2f s", seconds));
     }
 
     public void displayBestResult(Point2D.Double[] sol, Double dist) {

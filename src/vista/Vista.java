@@ -56,8 +56,8 @@ public class Vista extends JFrame {
         graphPanel.repaint();
     }
 
-    public void setTime(long nanoseconds) {
-        bottomPanel.setTime(nanoseconds);
+    public void setTime(double seconds) {
+        bottomPanel.setTime(seconds);
     }
 
     public void setBestResult() {
