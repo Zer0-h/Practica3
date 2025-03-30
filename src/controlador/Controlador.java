@@ -1,9 +1,8 @@
 package controlador;
 
-import java.awt.geom.Point2D;
 import model.BruteForceProcess;
 import model.DivideAndConquerProcess;
-import model.Method;
+import model.Metode;
 import model.Model;
 import vista.Vista;
 
@@ -32,15 +31,11 @@ public class Controlador implements Notificar{
     }
 
     public void iniciarProces() {
-        Point2D.Double[] puntos = model.getPuntos();
-        Method metodo = model.getMetodo();
-        boolean minimizar = model.isMinimizar();
-
         // Inicializamos el array de soluciones
         model.initSoluciones();
 
         Thread proces;
-        if (model.getMetodo() == Method.FUERZA_BRUTA) {
+        if (model.getMetodo() == Metode.FUERZA_BRUTA) {
             proces = new BruteForceProcess(this);
         } else {
             proces = new DivideAndConquerProcess(this);

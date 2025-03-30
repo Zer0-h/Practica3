@@ -6,16 +6,17 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import model.Distribution;
-import model.Method;
+import model.Distribucio;
+import model.Metode;
+import model.Tipus;
 
 public class TopPanel extends JPanel {
 
     private final Vista vista;
 
-    private JComboBox<Distribution> distribution;
-    private JComboBox<String> proximity;
-    private JComboBox<Method> solution;
+    private JComboBox<Distribucio> distribution;
+    private JComboBox<Tipus> problema;
+    private JComboBox<Metode> solution;
     private JComboBox<String> quantityPoints;
 
     private JButton generateB;
@@ -34,15 +35,15 @@ public class TopPanel extends JPanel {
         JLabel distributionLabel = new JLabel("Distribució:");
         this.add(distributionLabel);
 
-        this.distribution = new JComboBox<>(model.Distribution.values());
+        this.distribution = new JComboBox<>(Distribucio.values());
         this.add(distribution);
 
         // Proximitat
-        JLabel proximityLabel = new JLabel("Proximitat:");
-        this.add(proximityLabel);
+        JLabel problemaLabel = new JLabel("Problema:");
+        this.add(problemaLabel);
 
-        this.proximity = new JComboBox<>(new String[]{"Cerca", "Lejos"});
-        this.add(proximity);
+        this.problema = new JComboBox<>(Tipus.values());
+        this.add(problema);
 
         // Quantitat de Punts
         JLabel quantityPointsLabel = new JLabel("Punts:");
@@ -55,7 +56,7 @@ public class TopPanel extends JPanel {
         JLabel solutionLabel = new JLabel("Solució:");
         this.add(solutionLabel);
 
-        this.solution = new JComboBox<>(model.Method.values());
+        this.solution = new JComboBox<>(Metode.values());
         this.add(solution);
 
         // Botó per generar punts
@@ -72,19 +73,19 @@ public class TopPanel extends JPanel {
     }
 
     // GETTERS
-    protected Distribution getDistribution() {
-        return (Distribution) this.distribution.getSelectedItem();
+    protected Distribucio getDistribution() {
+        return (Distribucio) this.distribution.getSelectedItem();
     }
 
-    protected String getProximity() {
-        return (String) this.proximity.getSelectedItem();
+    protected Tipus getProximity() {
+        return (Tipus) this.problema.getSelectedItem();
     }
 
     protected int getQuantityPoints() {
         return Integer.parseInt((String) this.quantityPoints.getSelectedItem());
     }
 
-    protected Method getSolution() {
-        return (Method) this.solution.getSelectedItem();
+    protected Metode getSolution() {
+        return (Metode) this.solution.getSelectedItem();
     }
 }

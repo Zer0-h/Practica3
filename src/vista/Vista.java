@@ -7,8 +7,9 @@ import controlador.Notificar;
 import java.awt.*;
 import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import model.Distribution;
-import model.Method;
+import model.Distribucio;
+import model.Metode;
+import model.Tipus;
 
 public class Vista extends JFrame implements Notificar {
 
@@ -64,11 +65,11 @@ public class Vista extends JFrame implements Notificar {
     }
 
     protected void startClicked() {
-        if (modelo.exists()) {
-            String proximity = topPanel.getProximity();
-            Method typeSolution = topPanel.getSolution();
+        if (modelo.tePunts()) {
+            Tipus problema = topPanel.getProximity();
+            Metode typeSolution = topPanel.getSolution();
 
-            modelo.setMinimizar(proximity.equals("Cerca"));
+            modelo.setMinimizar(problema == Tipus.PROPER);
             modelo.setMetodo(typeSolution);
 
             controlador.notificar(Notificacio.ARRANCAR);
@@ -76,9 +77,9 @@ public class Vista extends JFrame implements Notificar {
     }
 
     protected void generatePointsClicked() {
-        Distribution distribution = topPanel.getDistribution();
-        int n = topPanel.getQuantityPoints();
-        modelo.reset(distribution, n);
+        Distribucio distribution = topPanel.getDistribution();
+        modelo.setDistribucion(distribution);
+        modelo.generarDatos(topPanel.getQuantityPoints());
         paintGraph();
     }
 

@@ -6,13 +6,12 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Model {
-    private int N; // Número de puntos
     private Point2D.Double[] puntos; // Puntos generados según la distribución
     private Point2D.Double[] puntsSolucio; // Pareja que forma la mejor solución
     private Double mejorDistancia; // Distancia de la mejor solución
 
-    private Distribution distribucion; // Distribución para generar los puntos
-    private Method metodo; // Método algoritmico para resolver el problema
+    private Distribucio distribucion; // Distribución para generar los puntos
+    private Metode metodo; // Método algoritmico para resolver el problema
     private boolean minimizar; // Opción para minimizar o maximizar la distáncia entre puntos
     private int ANCHO; // Ancho de la ventana
     private int ALTO; // Alto de la ventana
@@ -25,7 +24,6 @@ public class Model {
     }
 
     public Model(int n) {
-        this.N = n;
         this.puntos = null;
         this.puntsSolucio = new Point2D.Double[2];
         temps = 0;
@@ -36,8 +34,11 @@ public class Model {
         ALTO = height;
     }
 
-    private void generarDatos() {
-        puntos = new Point2D.Double[N];
+    public void generarDatos(int numeroPunts) {
+        this.puntsSolucio = null;
+        this.mejorDistancia = null;
+
+        puntos = new Point2D.Double[numeroPunts];
         Random rnd = new Random();
         switch (this.distribucion) {
             case GAUSSIAN -> {
@@ -93,7 +94,7 @@ public class Model {
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public void pushSolucion(Point2D.Double punt1, Point2D.Double punt2) {
+    public void setSolucioSiEs(Point2D.Double punt1, Point2D.Double punt2) {
         double distancia = punt1.distance(punt2);
         if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
             mejorDistancia = distancia;
@@ -118,11 +119,11 @@ public class Model {
         this.puntos = puntos;
     }
 
-    public Distribution getDistribucion() {
+    public Distribucio getDistribucion() {
         return distribucion;
     }
 
-    public void setDistribucion(Distribution distribucion) {
+    public void setDistribucion(Distribucio distribucion) {
         this.distribucion = distribucion;
     }
 
@@ -134,11 +135,11 @@ public class Model {
         this.minimizar = minimizar;
     }
 
-    public Method getMetodo() {
+    public Metode getMetodo() {
         return metodo;
     }
 
-    public void setMetodo(Method metodo) {
+    public void setMetodo(Metode metodo) {
         this.metodo = metodo;
     }
 
@@ -150,17 +151,7 @@ public class Model {
         return mejorDistancia;
     }
 
-    public void reset(Distribution distribution, int n) {
-        this.distribucion = distribution;
-        this.N = n;
-        this.puntsSolucio = null;
-        this.mejorDistancia = null;
-        this.generarDatos();
-    }
-
-    public boolean exists() {
+    public boolean tePunts() {
         return this.puntos != null;
     }
-
-
 }

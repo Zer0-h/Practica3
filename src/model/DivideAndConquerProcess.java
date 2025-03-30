@@ -38,7 +38,7 @@ public class DivideAndConquerProcess extends Thread {
             for (int i = start; i <= end; i++) {
                 for (int j = i + 1; j <= end; j++) {
                     double d = punts[i].distance(punts[j]);
-                    model.pushSolucion(punts[i], punts[j]);
+                    model.setSolucioSiEs(punts[i], punts[j]);
                     if (model.isMinimizar()) {
                         valorATornar = Math.min(valorATornar, d);
                     } else {
@@ -68,7 +68,7 @@ public class DivideAndConquerProcess extends Thread {
             for (int i = 0; i < idx; i++) {
                 for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < millorDistancia; j++) {
                     double dist = franja[i].distance(franja[j]);
-                    model.pushSolucion(franja[i], franja[j]);
+                    model.setSolucioSiEs(franja[i], franja[j]);
                     if (model.isMinimizar()) {
                         millorDistancia = Math.min(millorDistancia, dist);
                     } else {

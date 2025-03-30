@@ -25,14 +25,11 @@ public class BruteForceProcess extends Thread {
     }
 
     private void calcularBruteFroce(Model model) {
-        double millorDistancia = Double.MAX_VALUE;
         Point2D.Double[] punts = model.getPuntos();
 
         for (int i = 0; i < punts.length; i++) {
             for (int j = i + 1; j < punts.length; j++) {
-                double distancia = punts[i].distance(punts[j]);
-                model.pushSolucion(punts[i], punts[j]);
-                millorDistancia = Math.min(millorDistancia, distancia);
+                model.setSolucioSiEs(punts[i], punts[j]);
             }
         }
     }
