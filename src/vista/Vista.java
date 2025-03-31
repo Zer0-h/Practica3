@@ -40,7 +40,7 @@ public class Vista extends JFrame implements Notificar {
         add(topPanel, BorderLayout.NORTH);
 
         // Panell Central (Gràfic)
-        graphPanel = new GraphPanel(this, 800, 600);
+        graphPanel = new GraphPanel(800, 600);
         add(graphPanel, BorderLayout.CENTER);
 
         // Panell Inferior
@@ -83,12 +83,14 @@ public class Vista extends JFrame implements Notificar {
         Distribucio distribution = topPanel.getDistribution();
         modelo.setDistribucion(distribution);
         modelo.generarDatos(topPanel.getQuantityPoints());
+        graphPanel.colocaPunts(modelo.getPuntos());
         pintar();
     }
 
     private void finalitza() {
         bottomPanel.stopProgress();
         toggleInProgress(true);  // Disable the button
+        graphPanel.dibuixaLineaSolucio(modelo.getPuntsSolucio());
         bottomPanel.setTime(this.modelo.getTemps());
         setBestResult();
         pintar();

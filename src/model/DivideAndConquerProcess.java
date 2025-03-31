@@ -19,7 +19,7 @@ public class DivideAndConquerProcess extends Thread {
         // Ordenem per X abans de començar
         long tiempoI = System.nanoTime();
 
-        Point2D.Double[] punts = model.getPuntos();
+        Point2D.Double[] punts = model.getPuntos().clone();
 
         Arrays.sort(punts, Comparator.comparingDouble(Point2D.Double::getX));
         divideAndConquer(punts, 0, punts.length - 1);
