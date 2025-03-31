@@ -18,8 +18,6 @@ public class Model {
 
     // CONSTRUCTOR
     public Model() {
-        this.puntsSolucio = new Point2D.Double[2];
-        temps = 0;
     }
 
     public void setPanelSize(int width, int height) {
@@ -28,8 +26,8 @@ public class Model {
     }
 
     public void generarDatos(int numeroPunts) {
-        this.puntsSolucio = null;
-        this.mejorDistancia = null;
+        puntsSolucio = null;
+        mejorDistancia = null;
         mostrarLineaSolucio = false;
 
         puntos = new Point2D.Double[numeroPunts];
