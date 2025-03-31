@@ -44,7 +44,7 @@ public class Vista extends JFrame implements Notificar {
         add(graphPanel, BorderLayout.CENTER);
 
         // Panell Inferior
-        bottomPanel = new BottomPanel(this);
+        bottomPanel = new BottomPanel();
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);

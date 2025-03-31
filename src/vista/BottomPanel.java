@@ -10,7 +10,7 @@ public class BottomPanel extends JPanel {
     private final JTextArea resultArea;
     private final JProgressBar progressBar;
 
-    public BottomPanel(Vista vista) {
+    public BottomPanel() {
         setLayout(new BorderLayout());
 
         // Temps d'execució
