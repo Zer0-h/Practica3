@@ -25,7 +25,12 @@ public class DivideAndConquerProcess extends Thread {
         divideAndConquer(punts, 0, punts.length - 1);
 
         long tempsExecucio = System.nanoTime() - tiempoI;
-        model.setTemps(tempsExecucio / 1_000_000_000.0);
+
+        double seconds = tempsExecucio / 1_000_000_000.0;
+
+        model.setTemps(seconds);
+
+        model.updateConstant(model.getPuntos().length, seconds);
 
         controlador.notificar(Notificacio.FINALITZA);
     }

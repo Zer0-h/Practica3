@@ -7,20 +7,23 @@ import java.awt.geom.Point2D;
 public class BottomPanel extends JPanel {
 
     private final JLabel timeLabel;
-    private final JTextArea resultArea;
+    private final JTextArea textArea;
     private final JProgressBar progressBar;
+    private double tempsEstimat;
 
     public BottomPanel() {
         setLayout(new BorderLayout());
 
+        tempsEstimat = 0.0;
+
         // Temps d'execució
-        timeLabel = new JLabel("Temps: ");
+        timeLabel = new JLabel("Temps estimat: -- | Temps resultat: --");
         add(timeLabel, BorderLayout.NORTH);
 
         // Àrea de resultats
-        resultArea = new JTextArea(5, 30);
-        resultArea.setEditable(false);
-        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+        textArea = new JTextArea(5, 30);
+        textArea.setEditable(false);
+        add(new JScrollPane(textArea), BorderLayout.CENTER);
 
         // Barra de progrés
         progressBar = new JProgressBar();
@@ -29,12 +32,25 @@ public class BottomPanel extends JPanel {
         add(progressBar, BorderLayout.SOUTH);
     }
 
-    public void setTime(double seconds) {
-        timeLabel.setText(String.format("Temps %.2f s", seconds));
+    public void setTempsEstimat(double t) {
+        tempsEstimat = t;
+        actualitzaEtiquetaTemps(null);
     }
 
-    public void displayBestResult(Point2D.Double[] sol) {
-        resultArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), sol[0].distance(sol[1])));
+    public void setTempsReal(double tempsReal) {
+        actualitzaEtiquetaTemps(tempsReal);
+    }
+
+    private void actualitzaEtiquetaTemps(Double tempsReal) {
+        timeLabel.setText(
+                tempsReal == null
+                        ? String.format("Temps Estimat: %.2f s | Temps Real: -- s", tempsEstimat)
+                        : String.format("Temps Estimat: %.2f s | Temps Real: %.2f s", tempsEstimat, tempsReal)
+        );
+    }
+
+    public void displaySolution(Point2D.Double[] sol) {
+        textArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), sol[0].distance(sol[1])));
     }
 
     public void startProgress() {

@@ -15,9 +15,37 @@ public class Model {
     private int ALTO; // Alto de la ventana
     private double temps;
     private boolean mostrarLineaSolucio;
+    // Constants multiplicatives
+    private double constantBruteForce;
+    private double constantDivideConquer;
 
     // CONSTRUCTOR
     public Model() {
+        constantBruteForce = 0.000001;
+        constantDivideConquer = 0.000001;
+    }
+
+    public double calculateEstimatedTime() {
+        int n = puntos.length;
+        double estimatedTime;
+
+        if (metodo == Metode.FUERZA_BRUTA) {
+            estimatedTime = constantBruteForce * Math.pow(n, 2);
+        } else {
+            estimatedTime = constantDivideConquer * n * Math.log(n);
+        }
+
+        // Ajustar per donar temps en segons
+        return estimatedTime;
+    }
+
+    // Actualització de la constant després d'una execució
+    public void updateConstant(long n, double elapsedTime) {
+        if (getMetodo() == Metode.FUERZA_BRUTA) {
+            constantBruteForce = elapsedTime / (n * n);
+        } else if (getMetodo() == Metode.DIVIDE_Y_VENCERAS) {
+            constantDivideConquer = elapsedTime / (n * Math.log(n));
+        }
     }
 
     public void setPanelSize(int width, int height) {

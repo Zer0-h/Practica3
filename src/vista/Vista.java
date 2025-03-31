@@ -57,7 +57,7 @@ public class Vista extends JFrame implements Notificar {
     }
 
     public void setBestResult() {
-        bottomPanel.displayBestResult(modelo.getPuntsSolucio());
+        bottomPanel.displaySolution(modelo.getPuntsSolucio());
     }
 
     public Model getModelo() {
@@ -71,6 +71,8 @@ public class Vista extends JFrame implements Notificar {
 
             modelo.setMinimizar(problema == Tipus.PROPER);
             modelo.setMetodo(typeSolution);
+
+            bottomPanel.setTempsEstimat(modelo.calculateEstimatedTime());
 
             bottomPanel.startProgress();
             toggleInProgress(false);  // Disable the button
@@ -91,7 +93,7 @@ public class Vista extends JFrame implements Notificar {
         bottomPanel.stopProgress();
         toggleInProgress(true);  // Disable the button
         graphPanel.dibuixaLineaSolucio(modelo.getPuntsSolucio());
-        bottomPanel.setTime(this.modelo.getTemps());
+        bottomPanel.setTempsReal(modelo.getTemps());
         setBestResult();
         pintar();
     }

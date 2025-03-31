@@ -16,10 +16,13 @@ public class BruteForceProcess extends Thread {
 
         long tiempoI = System.nanoTime();
         calcularBruteFroce(model);
-
         long tempsExecucio = System.nanoTime() - tiempoI;
 
-        model.setTemps(tempsExecucio / 1_000_000_000.0);
+        double seconds = tempsExecucio / 1_000_000_000.0;
+        model.setTemps(seconds);
+
+        // Actualització de la constant
+        model.updateConstant(model.getPuntos().length, seconds);
 
         controlador.notificar(Notificacio.FINALITZA);
     }
