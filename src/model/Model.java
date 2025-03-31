@@ -21,8 +21,8 @@ public class Model {
 
     // CONSTRUCTOR
     public Model() {
-        constantBruteForce = 0.000001;
-        constantDivideConquer = 0.000001;
+        constantBruteForce = 0;
+        constantDivideConquer = 0;
     }
 
     public double calculateEstimatedTime() {
