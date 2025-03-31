@@ -10,14 +10,13 @@ public class Model {
 
     private Distribucio distribucion; // Distribución para generar los puntos
     private Metode metodo; // Método algoritmico para resolver el problema
-    private boolean minimizar; // Opción para minimizar o maximizar la distáncia entre puntos
+    private boolean minimizar; // Opción para minimizar o maximizar la distancia entre puntos
     private int ANCHO; // Ancho de la ventana
     private int ALTO; // Alto de la ventana
     private double temps;
 
-    // CONSTRUCTORS
+    // CONSTRUCTOR
     public Model() {
-        this.puntos = null;
         this.puntsSolucio = new Point2D.Double[2];
         temps = 0;
     }
@@ -33,47 +32,44 @@ public class Model {
 
         puntos = new Point2D.Double[numeroPunts];
         Random rnd = new Random();
+
+        for (int i = 0; i < puntos.length; i++) {
+            double x = generateValue(rnd, ANCHO);
+            double y = generateValue(rnd, ALTO);
+            puntos[i] = new Point2D.Double(x, y);
+        }
+    }
+
+    // Generador de valor segons la distribució
+    private double generateValue(Random rnd, int max) {
         switch (this.distribucion) {
             case GAUSSIAN -> {
-                for (int i = 0; i < puntos.length; i++) {
-                    double x = generateGaussianValue(rnd, ANCHO);
-                    double y = generateGaussianValue(rnd, ALTO);
-                    puntos[i] = new Point2D.Double(x, y);
-                }
+                return generateGaussianValue(rnd, max);
             }
             case EXPONENCIAL -> {
-                for (int i = 0; i < puntos.length; i++) {
-                    double x = generateExponentialValue(rnd, ANCHO);
-                    double y = generateExponentialValue(rnd, ALTO);
-                    puntos[i] = new Point2D.Double(x, y);
-                }
+                return generateExponentialValue(rnd, max);
             }
             case UNIFORME -> {
-                for (int i = 0; i < puntos.length; i++) {
-                    double x = rnd.nextDouble() * ANCHO;
-                    double y = rnd.nextDouble() * ALTO;
-                    puntos[i] = new Point2D.Double(x, y);
-                }
+                return rnd.nextDouble() * max;
             }
-            default -> throw new AssertionError();
+            default -> throw new AssertionError("Distribució no reconeguda: " + distribucion);
         }
     }
 
     private double generateGaussianValue(Random rnd, int max) {
         double value;
-
         do {
-            value = rnd.nextGaussian(max / 2, max / 6);
-        } while (value > max || value < 0);
+            value = rnd.nextGaussian(max / 2.0, max / 6.0);
+        } while (value < 0 || value > max);
         return value;
     }
 
     private double generateExponentialValue(Random rnd, int max) {
-        double lambda = 2.0 / max;  // Scale to have mean X/2
+        double lambda = 2.0 / max; // Scale to have mean X/2
         double value;
         do {
             value = -Math.log(1 - rnd.nextDouble()) / lambda;
-        } while (value > max);
+        } while (value < 0 || value > max);
         return value;
     }
 

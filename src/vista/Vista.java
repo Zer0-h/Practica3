@@ -52,7 +52,7 @@ public class Vista extends JFrame implements Notificar {
         modelo.setPanelSize(graphPanel.getWidth(), graphPanel.getHeight());
     }
 
-    public void paintGraph() {
+    public void pintar() {
         graphPanel.repaint();
     }
 
@@ -83,7 +83,7 @@ public class Vista extends JFrame implements Notificar {
         Distribucio distribution = topPanel.getDistribution();
         modelo.setDistribucion(distribution);
         modelo.generarDatos(topPanel.getQuantityPoints());
-        paintGraph();
+        pintar();
     }
 
     private void finalitza() {
@@ -91,7 +91,7 @@ public class Vista extends JFrame implements Notificar {
         toggleInProgress(true);  // Disable the button
         bottomPanel.setTime(this.modelo.getTemps());
         setBestResult();
-        paintGraph();
+        pintar();
     }
 
     protected void toggleInProgress(boolean inProgress) {
