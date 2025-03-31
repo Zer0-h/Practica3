@@ -14,6 +14,7 @@ public class Model {
     private int ANCHO; // Ancho de la ventana
     private int ALTO; // Alto de la ventana
     private double temps;
+    private boolean mostrarLineaSolucio;
 
     // CONSTRUCTOR
     public Model() {
@@ -29,6 +30,7 @@ public class Model {
     public void generarDatos(int numeroPunts) {
         this.puntsSolucio = null;
         this.mejorDistancia = null;
+        mostrarLineaSolucio = false;
 
         puntos = new Point2D.Double[numeroPunts];
         Random rnd = new Random();
@@ -77,18 +79,27 @@ public class Model {
      * Inicializa los atributos soluciones y distancias para
      */
     public void initSoluciones() {
-        puntsSolucio = new Point2D.Double[2];
-        puntsSolucio[0] = new Point2D.Double(0, 0);
-        puntsSolucio[1] = new Point2D.Double(0, 0);
+        puntsSolucio = null;
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
+    }
+
+    public boolean teSolucio(){
+        return puntsSolucio != null;
+    }
+
+    public void setMostrarLineaSolucio(boolean value){
+        mostrarLineaSolucio = value;
+    }
+
+    public boolean getMostrarLineaSolucio(){
+        return mostrarLineaSolucio;
     }
 
     public void setSolucioSiEs(Point2D.Double punt1, Point2D.Double punt2) {
         double distancia = punt1.distance(punt2);
         if ((minimizar && distancia < mejorDistancia) || (!minimizar && distancia > mejorDistancia)) {
             mejorDistancia = distancia;
-            puntsSolucio[0] = punt1;
-            puntsSolucio[1] = punt2;
+            puntsSolucio = new Point2D.Double[]{punt1, punt2};
         }
     }
 

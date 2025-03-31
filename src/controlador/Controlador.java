@@ -33,6 +33,7 @@ public class Controlador implements Notificar{
     public void iniciarProces() {
         // Inicializamos el array de soluciones
         model.initSoluciones();
+        model.setMostrarLineaSolucio(false);
 
         Thread proces;
         if (model.getMetodo() == Metode.FUERZA_BRUTA) {
@@ -57,8 +58,10 @@ public class Controlador implements Notificar{
         switch (n) {
             case Notificacio.ARRANCAR ->
                 iniciarProces();
-            case Notificacio.FINALITZA ->
+            case Notificacio.FINALITZA -> {
+                model.setMostrarLineaSolucio(true);
                 vista.notificar(n);
+            }
         }
     }
 
