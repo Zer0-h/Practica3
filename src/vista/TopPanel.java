@@ -72,6 +72,11 @@ public class TopPanel extends JPanel {
         startB.addActionListener(e -> vista.startClicked());
     }
 
+    protected void toggleInProgress(boolean inProgress) {
+        startB.setEnabled(inProgress);
+        generateB.setEnabled(inProgress);
+    }
+
     // GETTERS
     protected Distribucio getDistribution() {
         return (Distribucio) this.distribution.getSelectedItem();

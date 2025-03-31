@@ -32,7 +32,7 @@ public class Vista extends JFrame implements Notificar {
         setTitle("Pràctica 3 - Divideix i Venceràs");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        setSize(1000, 900);
+        setSize(1200, 900);
         setLocationRelativeTo(null);
 
         // Panell Superior
@@ -72,6 +72,9 @@ public class Vista extends JFrame implements Notificar {
             modelo.setMinimizar(problema == Tipus.PROPER);
             modelo.setMetodo(typeSolution);
 
+            bottomPanel.startProgress();
+            toggleInProgress(false);  // Disable the button
+
             controlador.notificar(Notificacio.ARRANCAR);
         }
     }
@@ -84,9 +87,15 @@ public class Vista extends JFrame implements Notificar {
     }
 
     private void finalitza() {
+        bottomPanel.stopProgress();
+        toggleInProgress(true);  // Disable the button
         bottomPanel.setTime(this.modelo.getTemps());
         setBestResult();
         paintGraph();
+    }
+
+    protected void toggleInProgress(boolean inProgress) {
+        topPanel.toggleInProgress(inProgress);
     }
 
     @Override

@@ -4,7 +4,6 @@ import controlador.Notificacio;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
-import vista.Vista;
 
 public class DivideAndConquerProcess extends Thread {
     private final Controlador controlador;

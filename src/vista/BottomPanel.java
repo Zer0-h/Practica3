@@ -2,22 +2,31 @@ package vista;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.awt.geom.Point2D;
 
 public class BottomPanel extends JPanel {
 
     private final JLabel timeLabel;
     private final JTextArea resultArea;
+    private final JProgressBar progressBar;
 
     public BottomPanel(Vista vista) {
         setLayout(new BorderLayout());
+
+        // Temps d'execució
         timeLabel = new JLabel("Temps: ");
         add(timeLabel, BorderLayout.NORTH);
 
+        // Àrea de resultats
         resultArea = new JTextArea(5, 30);
         resultArea.setEditable(false);
         add(new JScrollPane(resultArea), BorderLayout.CENTER);
+
+        // Barra de progrés
+        progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        progressBar.setVisible(false);
+        add(progressBar, BorderLayout.SOUTH);
     }
 
     public void setTime(double seconds) {
@@ -25,10 +34,14 @@ public class BottomPanel extends JPanel {
     }
 
     public void displayBestResult(Point2D.Double[] sol, Double dist) {
-        DecimalFormat df = new DecimalFormat("#.##########");
-        resultArea.setText("Millor Solució:\n");
-        resultArea.append("x1: " + df.format(sol[0].getX()) + " | y1: " + df.format(sol[0].getY()) + "\n");
-        resultArea.append("x2: " + df.format(sol[1].getX()) + " | y2: " + df.format(sol[1].getY()) + "\n");
-        resultArea.append("Distància: " + df.format(dist) + "\n");
+        resultArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), dist));
+    }
+
+    public void startProgress() {
+        progressBar.setVisible(true);
+    }
+
+    public void stopProgress() {
+        progressBar.setVisible(false);
     }
 }
