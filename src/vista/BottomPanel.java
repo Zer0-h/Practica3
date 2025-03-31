@@ -33,8 +33,8 @@ public class BottomPanel extends JPanel {
         timeLabel.setText(String.format("Temps %.2f s", seconds));
     }
 
-    public void displayBestResult(Point2D.Double[] sol, Double dist) {
-        resultArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), dist));
+    public void displayBestResult(Point2D.Double[] sol) {
+        resultArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), sol[0].distance(sol[1])));
     }
 
     public void startProgress() {

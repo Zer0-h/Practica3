@@ -29,7 +29,7 @@ public class GraphPanel extends JPanel {
         g2d.setColor(Color.BLACK);
 
         for (Point2D.Double p : puntos) {
-            g2d.fillOval((int) p.getX(), (int) p.getY(), 4, 4);
+            g2d.fillOval((int) p.getX(), (int) p.getY(), 2, 2);
         }
 
         if (mejor != null) {

@@ -57,7 +57,7 @@ public class Vista extends JFrame implements Notificar {
     }
 
     public void setBestResult() {
-        bottomPanel.displayBestResult(modelo.getPuntsSolucio(), modelo.getMejorDistancia());
+        bottomPanel.displayBestResult(modelo.getPuntsSolucio());
     }
 
     public Model getModelo() {

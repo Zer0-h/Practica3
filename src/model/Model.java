@@ -1,7 +1,5 @@
 package model;
 
-import vista.Vista;
-import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
@@ -19,11 +17,6 @@ public class Model {
 
     // CONSTRUCTORS
     public Model() {
-        this.puntsSolucio = new Point2D.Double[2];
-        temps = 0;
-    }
-
-    public Model(int n) {
         this.puntos = null;
         this.puntsSolucio = new Point2D.Double[2];
         temps = 0;
@@ -89,8 +82,8 @@ public class Model {
      */
     public void initSoluciones() {
         puntsSolucio = new Point2D.Double[2];
-        puntsSolucio[0] = new Point2D.Double(0d, 0d);
-        puntsSolucio[1] = new Point2D.Double(300d, 300d);
+        puntsSolucio[0] = new Point2D.Double(0, 0);
+        puntsSolucio[1] = new Point2D.Double(0, 0);
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
@@ -145,10 +138,6 @@ public class Model {
 
     public Point2D.Double[] getPuntsSolucio() {
         return puntsSolucio;
-    }
-
-    public Double getMejorDistancia() {
-        return mejorDistancia;
     }
 
     public boolean tePunts() {
