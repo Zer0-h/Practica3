@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Model {
+
     private Point2D.Double[] puntos; // Puntos generados según la distribución
     private Point2D.Double[] puntsSolucio; // Pareja que forma la mejor solución
     private Double mejorDistancia; // Distancia de la mejor solución
@@ -21,8 +22,6 @@ public class Model {
 
     // CONSTRUCTOR
     public Model() {
-        constantBruteForce = 0;
-        constantDivideConquer = 0;
     }
 
     public double calculateEstimatedTime() {
@@ -40,11 +39,14 @@ public class Model {
     }
 
     // Actualització de la constant després d'una execució
-    public void updateConstant(long n, double elapsedTime) {
-        if (getMetodo() == Metode.FUERZA_BRUTA) {
-            constantBruteForce = elapsedTime / (n * n);
-        } else if (getMetodo() == Metode.DIVIDE_Y_VENCERAS) {
-            constantDivideConquer = elapsedTime / (n * Math.log(n));
+    public void updateConstant(long n, double elapsedTime, Metode metode) {
+        switch (metode) {
+            case FUERZA_BRUTA ->
+                constantBruteForce = elapsedTime / (n * n);
+            case DIVIDE_Y_VENCERAS ->
+                constantDivideConquer = elapsedTime / (n * Math.log(n));
+            default ->
+                throw new IllegalArgumentException("Mètode desconegut: " + metode);
         }
     }
 
@@ -68,6 +70,18 @@ public class Model {
         }
     }
 
+    // Metode auxiliar per ajudar a calcular la constant multiplicativa incialment
+    public Point2D.Double[] generarPunts(int n) {
+        Point2D.Double[] punts = new Point2D.Double[n];
+        Random rnd = new Random();
+        for (int i = 0; i < n; i++) {
+            double x = rnd.nextDouble() * ANCHO;
+            double y = rnd.nextDouble() * ALTO;
+            punts[i] = new Point2D.Double(x, y);
+        }
+        return punts;
+    }
+
     // Generador de valor segons la distribució
     private double generateValue(Random rnd, int max) {
         switch (this.distribucion) {
@@ -80,7 +94,8 @@ public class Model {
             case UNIFORME -> {
                 return rnd.nextDouble() * max;
             }
-            default -> throw new AssertionError("Distribució no reconeguda: " + distribucion);
+            default ->
+                throw new AssertionError("Distribució no reconeguda: " + distribucion);
         }
     }
 
@@ -109,15 +124,15 @@ public class Model {
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public boolean teSolucio(){
+    public boolean teSolucio() {
         return puntsSolucio != null;
     }
 
-    public void setMostrarLineaSolucio(boolean value){
+    public void setMostrarLineaSolucio(boolean value) {
         mostrarLineaSolucio = value;
     }
 
-    public boolean getMostrarLineaSolucio(){
+    public boolean getMostrarLineaSolucio() {
         return mostrarLineaSolucio;
     }
 

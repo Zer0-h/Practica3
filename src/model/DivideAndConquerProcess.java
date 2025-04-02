@@ -1,38 +1,24 @@
 package model;
+
 import controlador.Controlador;
-import controlador.Notificacio;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class DivideAndConquerProcess extends Thread {
-    private final Controlador controlador;
-    private final Model model;
+public class DivideAndConquerProcess extends AbstractCalculProcess {
 
-    public DivideAndConquerProcess(Controlador c) {
-        this.controlador = c;
-        this.model = c.getModelo();
-     }
+    public DivideAndConquerProcess(Controlador controlador) {
+        super(controlador);
+    }
+
+    public DivideAndConquerProcess(Controlador controlador, Point2D.Double[] punts) {
+        super(controlador, punts);
+    }
 
     @Override
-    public void run() {
-        // Ordenem per X abans de començar
-        long tiempoI = System.nanoTime();
-
-        Point2D.Double[] punts = model.getPuntos().clone();
-
+    protected void calcular() {
         Arrays.sort(punts, Comparator.comparingDouble(Point2D.Double::getX));
         divideAndConquer(punts, 0, punts.length - 1);
-
-        long tempsExecucio = System.nanoTime() - tiempoI;
-
-        double seconds = tempsExecucio / 1_000_000_000.0;
-
-        model.setTemps(seconds);
-
-        model.updateConstant(model.getPuntos().length, seconds);
-
-        controlador.notificar(Notificacio.FINALITZA);
     }
 
     private double divideAndConquer(Point2D.Double[] punts, int start, int end) {
@@ -83,5 +69,10 @@ public class DivideAndConquerProcess extends Thread {
 
             return millorDistancia;
         }
+    }
+
+    @Override
+    protected Metode getMetode() {
+        return Metode.DIVIDE_Y_VENCERAS;
     }
 }

@@ -1,12 +1,14 @@
 package controlador;
 
+import java.awt.geom.Point2D;
+import model.AbstractCalculProcess;
 import model.BruteForceProcess;
 import model.DivideAndConquerProcess;
 import model.Metode;
 import model.Model;
 import vista.Vista;
 
-public class Controlador implements Notificar{
+public class Controlador implements Notificar {
 
     private Model model;
     private Vista vista;
@@ -26,8 +28,18 @@ public class Controlador implements Notificar{
     public void iniciar() {
         model = new Model();
         vista = new Vista(this);
-
+        calcularConstants();
         vista.mostrar();
+    }
+
+    private void calcularConstants() {
+        Point2D.Double[] punts = model.generarPunts(10000);
+        model.initSoluciones();
+        AbstractCalculProcess proces1 = new BruteForceProcess(this, punts);
+        AbstractCalculProcess proces2 = new DivideAndConquerProcess(this, punts);
+
+        proces1.start();
+        proces2.start();
     }
 
     public void iniciarProces() {
@@ -35,7 +47,7 @@ public class Controlador implements Notificar{
         model.initSoluciones();
         model.setMostrarLineaSolucio(false);
 
-        Thread proces;
+        AbstractCalculProcess proces;
         if (model.getMetodo() == Metode.FUERZA_BRUTA) {
             proces = new BruteForceProcess(this);
         } else {
