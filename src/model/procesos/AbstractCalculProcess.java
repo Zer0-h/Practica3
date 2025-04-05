@@ -1,8 +1,10 @@
-package model;
+package model.procesos;
 
 import controlador.Controlador;
 import controlador.Notificacio;
 import java.awt.geom.Point2D;
+import model.Metode;
+import model.Model;
 
 public abstract class AbstractCalculProcess extends Thread {
 

@@ -1,10 +1,10 @@
 package controlador;
 
 import java.awt.geom.Point2D;
-import model.AbstractCalculProcess;
-import model.BruteForceProcess;
-import model.ConvexHullProcess;
-import model.DivideAndConquerProcess;
+import model.procesos.AbstractCalculProcess;
+import model.procesos.BruteForceProcess;
+import model.procesos.ConvexHullProcess;
+import model.procesos.DivideAndConquerProcess;
 import static model.Metode.CONVEX_HULL;
 import static model.Metode.DIVIDE_Y_VENCERAS;
 import static model.Metode.FUERZA_BRUTA;

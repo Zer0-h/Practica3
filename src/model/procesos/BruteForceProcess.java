@@ -1,4 +1,4 @@
-package model;
+package model.procesos;
 
 import controlador.Controlador;
 import java.awt.geom.Point2D;
@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import model.Metode;
 
 public class BruteForceProcess extends AbstractCalculProcess {
 

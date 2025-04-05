@@ -1,10 +1,11 @@
-package model;
+package model.procesos;
 
 import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import model.Metode;
 
 public class ConvexHullProcess extends AbstractCalculProcess {
 

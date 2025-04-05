@@ -1,9 +1,10 @@
-package model;
+package model.procesos;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.concurrent.RecursiveTask;
+import model.Model;
 
 public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
     private final Point2D.Double[] punts;
