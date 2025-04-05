@@ -10,5 +10,5 @@ package controlador;
 public enum Notificacio {
     ARRANCAR,
     FINALITZA,
-    GENERAR_PUNTS,
+    INVALID,
 }

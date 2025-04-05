@@ -50,7 +50,9 @@ public class BottomPanel extends JPanel {
     }
 
     public void displaySolution(Point2D.Double[] sol) {
-        textArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), sol[0].distance(sol[1])));
+        if (sol != null && sol[0] != null && sol[1] != null) {
+            textArea.setText(String.format("Solució:\nPunt 1: (%f, %f)\nPunt 2: (%f, %f)\nDistància: %f", sol[0].getX(), sol[0].getY(), sol[1].getX(), sol[1].getY(), sol[0].distance(sol[1])));
+        }
     }
 
     public void startProgress() {

@@ -15,7 +15,7 @@ public abstract class AbstractCalculProcess extends Thread {
     public AbstractCalculProcess(Controlador controlador) {
         this.controlador = controlador;
         this.model = controlador.getModelo();
-        this.punts = model.getPuntos().clone();  // Clonem per evitar modificar els punts visuals
+        this.punts = model.getPuntos();
         this.calculaCMInicial = false;
     }
 
@@ -23,7 +23,7 @@ public abstract class AbstractCalculProcess extends Thread {
     public AbstractCalculProcess(Controlador controlador, Point2D.Double[] punts) {
         this.controlador = controlador;
         this.model = controlador.getModelo();
-        this.punts = punts;  // Punt personalitzats
+        this.punts = punts;
         this.calculaCMInicial = true;
     }
 

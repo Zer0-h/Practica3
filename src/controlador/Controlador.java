@@ -3,8 +3,11 @@ package controlador;
 import java.awt.geom.Point2D;
 import model.AbstractCalculProcess;
 import model.BruteForceProcess;
+import model.ConvexHullProcess;
 import model.DivideAndConquerProcess;
-import model.Metode;
+import static model.Metode.CONVEX_HULL;
+import static model.Metode.DIVIDE_Y_VENCERAS;
+import static model.Metode.FUERZA_BRUTA;
 import model.Model;
 import vista.Vista;
 
@@ -37,9 +40,11 @@ public class Controlador implements Notificar {
         model.initSoluciones();
         AbstractCalculProcess proces1 = new BruteForceProcess(this, punts);
         AbstractCalculProcess proces2 = new DivideAndConquerProcess(this, punts);
+        AbstractCalculProcess proces3 = new ConvexHullProcess(this, punts);
 
         proces1.start();
         proces2.start();
+        proces3.start();
     }
 
     public void iniciarProces() {
@@ -48,10 +53,19 @@ public class Controlador implements Notificar {
         model.setMostrarLineaSolucio(false);
 
         AbstractCalculProcess proces;
-        if (model.getMetodo() == Metode.FUERZA_BRUTA) {
-            proces = new BruteForceProcess(this);
-        } else {
-            proces = new DivideAndConquerProcess(this);
+
+        switch (model.getMetodo()) {
+            case FUERZA_BRUTA -> proces = new BruteForceProcess(this);
+            case DIVIDE_Y_VENCERAS -> proces = new DivideAndConquerProcess(this);
+            case CONVEX_HULL -> {
+                if (model.isMinimizar()) {
+                    vista.notificar(Notificacio.INVALID);
+                    return;
+                } else {
+                    proces = new ConvexHullProcess(this);
+                }
+            }
+            default -> throw new IllegalArgumentException("Intentant arrancar metode desconegut");
         }
 
         proces.start();

@@ -34,9 +34,17 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
         double distDreta = rightTask.compute();
         double distEsq = leftTask.join();
 
-        double millorDistancia = model.isMinimizar() ? Math.min(distEsq, distDreta) : Math.max(distEsq, distDreta);
+        double millorDistancia = getMillorDistancia(distEsq, distDreta);
 
         return combinarResultats(punts, start, end, mid, millorDistancia);
+    }
+
+    private double getMillorDistancia(double dist1, double dist2) {
+        if (model.isMinimizar()) {
+            return Math.min(dist1, dist2);
+        } else {
+            return Math.max(dist1, dist2);
+        }
     }
 
     private double calcularDirectament(Point2D.Double[] punts, int start, int end) {
@@ -46,11 +54,7 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
             for (int j = i + 1; j <= end; j++) {
                 double d = punts[i].distance(punts[j]);
                 model.setSolucioSiEs(punts[i], punts[j]);
-                if (model.isMinimizar()) {
-                     millorDistancia = Math.min(millorDistancia, d);
-                 } else {
-                     millorDistancia = Math.max(millorDistancia, d);
-                 }
+                millorDistancia = getMillorDistancia(millorDistancia, d);
             }
         }
         return millorDistancia;
@@ -73,11 +77,7 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
             for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < millorDistancia; j++) {
                 double dist = franja[i].distance(franja[j]);
                 model.setSolucioSiEs(franja[i], franja[j]);
-                if (model.isMinimizar()) {
-                    millorDistancia = Math.min(millorDistancia, dist);
-                } else {
-                    millorDistancia = Math.max(millorDistancia, dist);
-                }
+                millorDistancia = getMillorDistancia(millorDistancia, dist);
             }
         }
 

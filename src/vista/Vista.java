@@ -102,11 +102,17 @@ public class Vista extends JFrame implements Notificar {
         topPanel.toggleInProgress(inProgress);
     }
 
+    protected void invalid() {
+        toggleInProgress(true);
+        bottomPanel.stopProgress();
+        JOptionPane.showMessageDialog(null, "No es pot executar el procés" + Metode.CONVEX_HULL + " per a la parella de punts més propera", "OK!", JOptionPane.WARNING_MESSAGE);
+    }
+
     @Override
     public void notificar(Notificacio n) {
         switch (n) {
-            case Notificacio.FINALITZA ->
-                finalitza();
+            case Notificacio.FINALITZA -> finalitza();
+            case Notificacio.INVALID -> invalid();
         }
     }
 }

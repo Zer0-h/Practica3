@@ -19,36 +19,35 @@ public class Model {
     // Constants multiplicatives
     private double constantBruteForce;
     private double constantDivideConquer;
+    private double constantConvexHull;
 
     // CONSTRUCTOR
     public Model() {
     }
 
-    public double calculateEstimatedTime() {
-        int n = puntos.length;
-        double estimatedTime;
+public double calculateEstimatedTime() {
+    int n = puntos.length;
+    double estimatedTime;
 
-        if (metodo == Metode.FUERZA_BRUTA) {
-            estimatedTime = constantBruteForce * Math.pow(n, 2);
-        } else {
-            estimatedTime = constantDivideConquer * n * Math.log(n);
-        }
-
-        // Ajustar per donar temps en segons
-        return estimatedTime;
+    switch (metodo) {
+        case FUERZA_BRUTA -> estimatedTime = constantBruteForce * Math.pow(n, 2);
+        case DIVIDE_Y_VENCERAS -> estimatedTime = constantDivideConquer * n * Math.log(n);
+        case CONVEX_HULL -> estimatedTime = constantConvexHull * n * Math.log(n);
+        default -> throw new IllegalArgumentException("Mètode desconegut: " + metodo);
     }
+
+    return estimatedTime;
+}
 
     // Actualització de la constant després d'una execució
-    public void updateConstant(long n, double elapsedTime, Metode metode) {
-        switch (metode) {
-            case FUERZA_BRUTA ->
-                constantBruteForce = elapsedTime / (n * n);
-            case DIVIDE_Y_VENCERAS ->
-                constantDivideConquer = elapsedTime / (n * Math.log(n));
-            default ->
-                throw new IllegalArgumentException("Mètode desconegut: " + metode);
-        }
+public void updateConstant(long n, double elapsedTime, Metode metode) {
+    switch (metode) {
+        case FUERZA_BRUTA -> constantBruteForce = elapsedTime / (n * n);
+        case DIVIDE_Y_VENCERAS -> constantDivideConquer = elapsedTime / (n * Math.log(n));
+        case CONVEX_HULL -> constantConvexHull = elapsedTime / (n * Math.log(n));
+        default -> throw new IllegalArgumentException("Mètode desconegut: " + metode);
     }
+}
 
     public void setPanelSize(int width, int height) {
         ANCHO = width;

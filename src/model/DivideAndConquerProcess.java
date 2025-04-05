@@ -21,8 +21,12 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
 
     @Override
     protected void calcular() {
-        Arrays.sort(punts, Comparator.comparingDouble(Point2D.Double::getX));
-        forkJoinPool.invoke(new DivideAndConquerRecursiveTask(punts, 0, punts.length - 1, model));
+        // Copiam l'array ja que
+        Point2D.Double[] copia = new Point2D.Double[punts.length];
+        System.arraycopy(punts, 0, copia, 0, punts.length);
+
+        Arrays.sort(copia, Comparator.comparingDouble(Point2D.Double::getX));
+        forkJoinPool.invoke(new DivideAndConquerRecursiveTask(copia, 0, copia.length - 1, model));
     }
 
     @Override
