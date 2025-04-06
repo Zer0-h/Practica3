@@ -60,7 +60,7 @@ public class Controlador implements Notificar {
         AbstractCalculProcess proces;
 
         // Selecció de l'algorisme segons el mètode
-        switch (model.getMetodo()) {
+        switch (model.getMetode()) {
             case FUERZA_BRUTA -> proces = new BruteForceProcess(this);
             case DIVIDE_Y_VENCERAS -> proces = new DivideAndConquerProcess(this);
             case CONVEX_HULL -> {

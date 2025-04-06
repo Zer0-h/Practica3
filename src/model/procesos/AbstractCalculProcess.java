@@ -20,7 +20,7 @@ public abstract class AbstractCalculProcess extends Thread {
     public AbstractCalculProcess(Controlador controlador) {
         this.controlador = controlador;
         this.model = controlador.getModel();
-        this.punts = model.getPuntos();
+        this.punts = model.getPunts();
         this.calculaCMInicial = false;
     }
 
@@ -41,7 +41,7 @@ public abstract class AbstractCalculProcess extends Thread {
         double seconds = tempsExecucio / 1_000_000_000.0;
 
         // Actualització de la constant multiplicativa
-        model.updateConstant(punts.length, seconds, getMetode());
+        model.actualitzarConstant(punts.length, seconds, getMetode());
         model.setTemps(seconds);
 
         if (!this.calculaCMInicial) {

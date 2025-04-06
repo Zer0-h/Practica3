@@ -52,7 +52,7 @@ public class Vista extends JFrame implements Notificar {
 
         setVisible(true);
 
-        modelo.setPanelSize(graphPanel.getWidth(), graphPanel.getHeight());
+        modelo.setMidaPanel(graphPanel.getWidth(), graphPanel.getHeight());
     }
 
     public void pintar() {
@@ -73,9 +73,9 @@ public class Vista extends JFrame implements Notificar {
             Metode typeSolution = topPanel.getSolution();
 
             modelo.setMinimizar(problema == Tipus.PROPER);
-            modelo.setMetodo(typeSolution);
+            modelo.setMetode(typeSolution);
 
-            bottomPanel.setTempsEstimat(modelo.calculateEstimatedTime());
+            bottomPanel.setTempsEstimat(modelo.calcularTempsEstimacio());
 
             bottomPanel.startProgress();
             toggleInProgress(false);  // Disable the button
@@ -86,9 +86,9 @@ public class Vista extends JFrame implements Notificar {
 
     protected void generatePointsClicked() {
         Distribucio distribution = topPanel.getDistribution();
-        modelo.setDistribucion(distribution);
-        modelo.generarDatos(topPanel.getQuantityPoints());
-        graphPanel.colocaPunts(modelo.getPuntos());
+        modelo.setDistribucio(distribution);
+        modelo.generarNuvolPunts(topPanel.getQuantityPoints());
+        graphPanel.colocaPunts(modelo.getPunts());
         pintar();
     }
 
