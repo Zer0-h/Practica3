@@ -12,6 +12,19 @@ import model.Model;
 import vista.Vista;
 
 /**
+ * Classe Controlador:
+ * S'encarrega de gestionar la interacció entre el model i la vista, seguint el patró arquitectònic MVC.
+ * Controla el flux d'execució de l'aplicació i coordina les operacions entre les dades i la interfície gràfica.
+ *
+ * Funcions principals:
+ * - Iniciar el programa i configurar els components principals.
+ * - Gestionar l'execució dels algorismes de càlcul segons el mètode seleccionat.
+ * - Notificar la vista dels resultats i actualitzacions.
+ * - Controlar l'inici dels processos de càlcul i la notificació de finalització.
+ *
+ * Aquesta classe centralitza la lògica de coordinació, assegurant que el model i la vista
+ * es mantinguin desacoblats mitjançant la gestió d'esdeveniments.
+ *
  * @author tonitorres
  */
 public class Controlador implements Notificar {

@@ -1,19 +1,39 @@
 package model;
 
 /**
+ * Enum Metode: Representa els diferents mètodes algorísmics per calcular
+ * la parella de punts més pròxima o més distant en un conjunt de punts.
+ *
+ * Cada mètode té una descripció associada que inclou la complexitat computacional.
+ *
+ * Tipus de mètodes:
+ * - FUERZA_BRUTA: Algorisme clàssic amb complexitat O(n²).
+ * - DIVIDE_Y_VENCERAS: Algorisme de Divideix i Venceràs amb complexitat O(n·log(n)).
+ * - CONVEX_HULL: Algorisme basat en Convex Hull amb Rotating Calipers amb complexitat O(n·log(n)).
+ *
  * @author tonitorres
  */
 public enum Metode {
-    FUERZA_BRUTA("Clàsic O(n²)"),
+    FUERZA_BRUTA("Clàssic O(n²)"),
     DIVIDE_Y_VENCERAS("Divideix i Venceràs O(n·log(n))"),
     CONVEX_HULL("Convex Hull + Rotating Calipers O(n·log(n))");
 
     private final String description;
 
-    Metode(String description) {
-        this.description = description;
+    /**
+     * Constructor per inicialitzar la descripció del mètode.
+     *
+     * @param description La descripció textual del mètode i la seva complexitat.
+     */
+    Metode(String d) {
+        description = d;
     }
 
+    /**
+     * Retorna la descripció del mètode amb la seva complexitat.
+     *
+     * @return Una cadena amb la descripció del mètode.
+     */
     @Override
     public String toString() {
         return description;

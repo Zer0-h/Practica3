@@ -4,6 +4,11 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
+ * Classe Model: representa les dades i la lògica del problema de trobar parelles
+ * de punts més properes o més llunyanes en un núvol de punts generat.
+ * Permet generar punts aleatoris segons diverses distribucions i calcular el
+ * temps estimat segons el mètode d'execució.
+ *
  * @author tonitorres
  */
 public class Model {
