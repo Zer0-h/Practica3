@@ -64,12 +64,12 @@ public class Model {
 
     /**
      * Defineix la mida del panell de visualització.
-     * @param amplada Amplada del panell gràfic.
-     * @param altura Altura del panell gràfic.
+     * @param amp Amplada del panell gràfic.
+     * @param alt Altura del panell gràfic.
      */
-    public void setMidaPanel(int amplada, int altura) {
-        this.amplada = amplada;
-        this.altura = altura;
+    public void setMidaPanel(int amp, int alt) {
+        amplada = amp;
+        altura = alt;
     }
 
     /**
@@ -145,20 +145,48 @@ public class Model {
         millorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
-    public void setMostrarLineaSolucio(boolean value) {
-        mostrarLineaSolucio = value;
-    }
-
-    public boolean getMostrarLineaSolucio() {
-        return mostrarLineaSolucio;
-    }
-
+    /**
+     * Revisa si la distància entre dos punts és una nova solució i la guarda si ho és.
+     * @param punt1
+     * @param punt2
+     */
     public void setSolucioSiEs(Point2D.Double punt1, Point2D.Double punt2) {
         double distancia = punt1.distance(punt2);
         if ((minimizar && distancia < millorDistancia) || (!minimizar && distancia > millorDistancia)) {
             millorDistancia = distancia;
             puntsSolucio = new Point2D.Double[]{punt1, punt2};
         }
+    }
+
+
+    /**
+     * Comprova si el model té punts generats.
+     * @return Cert si el model té punts, fals altrament.
+     */
+    public boolean tePunts() {
+        return this.punts != null;
+    }
+
+    /**
+     * Calcula el producte vectorial entre tres punts.
+     * @param punt1
+     * @param punt2
+     * @param punt3
+     * @return Resultat del producte
+     */
+    public double producteVectorial(Point2D.Double punt1, Point2D.Double punt2, Point2D.Double punt3) {
+        return (punt2.getX() - punt1.getX()) * (punt3.getY() - punt1.getY()) - (punt2.getY() - punt1.getY()) * (punt3.getX() - punt1.getX());
+    }
+
+    /**
+     * Getters i setters
+     */
+    public void setMostrarLineaSolucio(boolean value) {
+        mostrarLineaSolucio = value;
+    }
+
+    public boolean getMostrarLineaSolucio() {
+        return mostrarLineaSolucio;
     }
 
     public void setTemps(double valor) {
@@ -177,35 +205,27 @@ public class Model {
         return distribucio;
     }
 
-    public void setDistribucio(Distribucio distribucio) {
-        this.distribucio = distribucio;
+    public void setDistribucio(Distribucio d) {
+        distribucio = d;
     }
 
     public boolean isMinimizar() {
         return minimizar;
     }
 
-    public void setMinimizar(boolean minimizar) {
-        this.minimizar = minimizar;
+    public void setMinimizar(boolean m) {
+        minimizar = m;
     }
 
     public Metode getMetode() {
         return metode;
     }
 
-    public void setMetode(Metode metode) {
-        this.metode = metode;
+    public void setMetode(Metode m) {
+        metode = m;
     }
 
     public Point2D.Double[] getPuntsSolucio() {
         return puntsSolucio;
-    }
-
-    public boolean tePunts() {
-        return this.punts != null;
-    }
-
-    public double producteVectorial(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
-        return (b.getX() - a.getX()) * (c.getY() - a.getY()) - (b.getY() - a.getY()) * (c.getX() - a.getX());
     }
 }
