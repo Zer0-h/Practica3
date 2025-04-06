@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * @author tonitorres
+ */
 public enum Distribucio {
     GAUSSIAN("Gaussiana"),
     EXPONENCIAL("Exponencial"),

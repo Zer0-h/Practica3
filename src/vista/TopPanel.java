@@ -10,6 +10,9 @@ import model.Distribucio;
 import model.Metode;
 import model.Tipus;
 
+/**
+ * @author tonitorres
+ */
 public class TopPanel extends JPanel {
 
     private final Vista vista;

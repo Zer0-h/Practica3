@@ -11,6 +11,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import model.Metode;
 
+/**
+ * @author tonitorres
+ */
 public class BruteForceProcess extends AbstractCalculProcess {
 
     public BruteForceProcess(Controlador controlador) {

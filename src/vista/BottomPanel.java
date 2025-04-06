@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
+/**
+ * @author tonitorres
+ */
 public class BottomPanel extends JPanel {
 
     private final JLabel timeLabel;

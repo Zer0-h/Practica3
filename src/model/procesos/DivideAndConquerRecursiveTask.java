@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.concurrent.RecursiveTask;
 import model.Model;
 
+/**
+ * @author tonitorres
+ */
 public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
     private final Point2D.Double[] punts;
     private final int start, end;

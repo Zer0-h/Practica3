@@ -11,6 +11,9 @@ import model.Distribucio;
 import model.Metode;
 import model.Tipus;
 
+/**
+ * @author tonitorres
+ */
 public class Vista extends JFrame implements Notificar {
 
     private Controlador controlador;
@@ -25,7 +28,7 @@ public class Vista extends JFrame implements Notificar {
 
     public Vista(Controlador controlador) {
         this.controlador = controlador;
-        this.modelo = controlador.getModelo();
+        this.modelo = controlador.getModel();
     }
 
     public void mostrar() {

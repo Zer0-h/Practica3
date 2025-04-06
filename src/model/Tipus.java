@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * @author tonitorres
+ */
 public enum Tipus {
     PROPER("Parella més propera"),
     LLUNY("Parella més llunyana");

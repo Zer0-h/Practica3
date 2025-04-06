@@ -3,6 +3,9 @@ package model;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
+/**
+ * @author tonitorres
+ */
 public class Model {
 
     private Point2D.Double[] puntos; // Puntos generados según la distribución
@@ -118,7 +121,7 @@ public void updateConstant(long n, double elapsedTime, Metode metode) {
     /**
      * Inicializa los atributos soluciones y distancias para
      */
-    public void initSoluciones() {
+    public void resetSolucio() {
         puntsSolucio = null;
         mejorDistancia = minimizar ? Double.MAX_VALUE : Double.MIN_VALUE;
     }

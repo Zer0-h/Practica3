@@ -7,6 +7,9 @@ import java.util.Comparator;
 import java.util.List;
 import model.Metode;
 
+/**
+ * @author tonitorres
+ */
 public class ConvexHullProcess extends AbstractCalculProcess {
 
     public ConvexHullProcess(Controlador controlador) {

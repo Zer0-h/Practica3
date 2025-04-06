@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * @author tonitorres
+ */
 public enum Metode {
     FUERZA_BRUTA("Clàsic O(n²)"),
     DIVIDE_Y_VENCERAS("Divideix i Venceràs O(n·log(n))"),

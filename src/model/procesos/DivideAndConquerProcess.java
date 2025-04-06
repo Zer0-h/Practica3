@@ -1,6 +1,5 @@
 package model.procesos;
 
-import model.procesos.AbstractCalculProcess;
 import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
@@ -8,6 +7,9 @@ import java.util.Comparator;
 import java.util.concurrent.ForkJoinPool;
 import model.Metode;
 
+/**
+ * @author tonitorres
+ */
 public class DivideAndConquerProcess extends AbstractCalculProcess {
 
     // Utilitzem un pool global per a tota l'aplicació
