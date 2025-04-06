@@ -12,18 +12,37 @@ import java.util.concurrent.Future;
 import model.Metode;
 
 /**
- * @author tonitorres
+ * Classe BruteForceProcess: Implementa el càlcul de la parella de punts més propera o més llunyana
+ * utilitzant el mètode de força bruta (complexitat O(n²)).
+ *
+ * Utilitza paral·lelisme amb un ExecutorService per optimitzar el càlcul.
+ * Cada fil calcula distàncies en un bloc diferent de punts.
+ *
+ * @autor tonitorres
  */
 public class BruteForceProcess extends AbstractCalculProcess {
 
+    /**
+     * Constructor per defecte: utilitza els punts del model.
+     * @param controlador El controlador de l'aplicació.
+     */
     public BruteForceProcess(Controlador controlador) {
         super(controlador);
     }
 
+    /**
+     * Constructor amb punts específics (utilitzat per a càlculs de constants).
+     * @param controlador El controlador de l'aplicació.
+     * @param punts Conjunt de punts a utilitzar.
+     */
     public BruteForceProcess(Controlador controlador, Point2D.Double[] punts) {
         super(controlador, punts);
     }
 
+    /**
+     * Mètode principal de càlcul. Divideix els punts en blocs per paral·lelitzar el càlcul
+     * de distàncies utilitzant múltiples fils.
+     */
     @Override
     protected void calcular() {
         int numThreads = Runtime.getRuntime().availableProcessors();
@@ -34,11 +53,12 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
         List<Future<Void>> futures = new ArrayList<>();
 
+        // Creació de tasques i enviament a l'executor
         for (int t = 0; t < numThreads; t++) {
             int start = t * blockSize;
             int end = (t == numThreads - 1) ? numPunts : (t + 1) * blockSize;
 
-            futures.add(executor.submit(tareaDistancia(start, end, numPunts)));
+            futures.add(executor.submit(crearTascaDistancia(start, end, numPunts)));
         }
 
         // Esperem que tots els fils acabin
@@ -54,7 +74,14 @@ public class BruteForceProcess extends AbstractCalculProcess {
         executor.shutdown();
     }
 
-    private Callable<Void> tareaDistancia(int start, int end, int numPunts) {
+    /**
+     * Crea una tasca de càlcul de distància per a un bloc de punts.
+     * @param start Índex d'inici del bloc.
+     * @param end Índex de final del bloc.
+     * @param numPunts Nombre total de punts.
+     * @return Una tasca Callable que calcula les distàncies en el bloc indicat.
+     */
+    private Callable<Void> crearTascaDistancia(int start, int end, int numPunts) {
         return () -> {
             for (int i = start; i < end; i++) {
                 for (int j = i + 1; j < numPunts; j++) {
@@ -65,8 +92,12 @@ public class BruteForceProcess extends AbstractCalculProcess {
         };
     }
 
+    /**
+     * Retorna el mètode de càlcul utilitzat en aquesta classe (Força Bruta).
+     * @return El mètode FORCA_BRUTA.
+     */
     @Override
     protected Metode getMetode() {
-        return Metode.FUERZA_BRUTA;
+        return Metode.FORCA_BRUTA;
     }
 }

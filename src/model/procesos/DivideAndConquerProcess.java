@@ -35,6 +35,6 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
 
     @Override
     protected Metode getMetode() {
-        return Metode.DIVIDE_Y_VENCERAS;
+        return Metode.DIVIDEIX;
     }
 }

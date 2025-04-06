@@ -7,15 +7,15 @@ package model;
  * Cada mètode té una descripció associada que inclou la complexitat computacional.
  *
  * Tipus de mètodes:
- * - FUERZA_BRUTA: Algorisme clàssic amb complexitat O(n²).
- * - DIVIDE_Y_VENCERAS: Algorisme de Divideix i Venceràs amb complexitat O(n·log(n)).
+ * - FORCA_BRUTA: Algorisme clàssic amb complexitat O(n²).
+ * - DIVIDEIX: Algorisme de Divideix i Venceràs amb complexitat O(n·log(n)).
  * - CONVEX_HULL: Algorisme basat en Convex Hull amb Rotating Calipers amb complexitat O(n·log(n)).
  *
  * @author tonitorres
  */
 public enum Metode {
-    FUERZA_BRUTA("Clàssic O(n²)"),
-    DIVIDE_Y_VENCERAS("Divideix i Venceràs O(n·log(n))"),
+    FORCA_BRUTA("Clàssic O(n²)"),
+    DIVIDEIX("Divideix i Venceràs O(n·log(n))"),
     CONVEX_HULL("Convex Hull + Rotating Calipers O(n·log(n))");
 
     private final String description;

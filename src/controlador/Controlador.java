@@ -6,10 +6,10 @@ import model.procesos.BruteForceProcess;
 import model.procesos.ConvexHullProcess;
 import model.procesos.DivideAndConquerProcess;
 import static model.Metode.CONVEX_HULL;
-import static model.Metode.DIVIDE_Y_VENCERAS;
-import static model.Metode.FUERZA_BRUTA;
 import model.Model;
 import vista.Vista;
+import static model.Metode.FORCA_BRUTA;
+import static model.Metode.DIVIDEIX;
 
 /**
  * Classe Controlador:
@@ -74,8 +74,8 @@ public class Controlador implements Notificar {
 
         // Selecció de l'algorisme segons el mètode
         switch (model.getMetode()) {
-            case FUERZA_BRUTA -> proces = new BruteForceProcess(this);
-            case DIVIDE_Y_VENCERAS -> proces = new DivideAndConquerProcess(this);
+            case FORCA_BRUTA -> proces = new BruteForceProcess(this);
+            case DIVIDEIX -> proces = new DivideAndConquerProcess(this);
             case CONVEX_HULL -> {
                 // Comprovació de validesa: el convex hull no serveix per a la parella més propera
                 if (model.isMinimizar()) {

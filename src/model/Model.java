@@ -43,8 +43,8 @@ public class Model {
         double tempsEstimat;
 
         switch (metode) {
-            case FUERZA_BRUTA -> tempsEstimat = constantBruteForce * Math.pow(n, 2);
-            case DIVIDE_Y_VENCERAS -> tempsEstimat = constantDivideConquer * n * Math.log(n);
+            case FORCA_BRUTA -> tempsEstimat = constantBruteForce * Math.pow(n, 2);
+            case DIVIDEIX -> tempsEstimat = constantDivideConquer * n * Math.log(n);
             case CONVEX_HULL -> tempsEstimat = constantConvexHull * n * Math.log(n);
             default -> throw new IllegalArgumentException("Mètode desconegut: " + metode);
         }
@@ -60,8 +60,8 @@ public class Model {
      */
     public void actualitzarConstant(long n, double tempsExecucio, Metode metode) {
         switch (metode) {
-            case FUERZA_BRUTA -> constantBruteForce = tempsExecucio / (n * n);
-            case DIVIDE_Y_VENCERAS -> constantDivideConquer = tempsExecucio / (n * Math.log(n));
+            case FORCA_BRUTA -> constantBruteForce = tempsExecucio / (n * n);
+            case DIVIDEIX -> constantDivideConquer = tempsExecucio / (n * Math.log(n));
             case CONVEX_HULL -> constantConvexHull = tempsExecucio / (n * Math.log(n));
             default -> throw new IllegalArgumentException("Mètode desconegut: " + metode);
         }
