@@ -190,4 +190,9 @@ public void updateConstant(long n, double elapsedTime, Metode metode) {
     public boolean tePunts() {
         return this.puntos != null;
     }
+
+    public double producteVectorial(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
+        return (b.getX() - a.getX()) * (c.getY() - a.getY()) -
+       (b.getY() - a.getY()) * (c.getX() - a.getX());
+    }
 }

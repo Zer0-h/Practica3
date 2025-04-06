@@ -35,15 +35,7 @@ public class BruteForceProcess extends AbstractCalculProcess {
             int start = t * blockSize;
             int end = (t == numThreads - 1) ? numPunts : (t + 1) * blockSize;
 
-            Callable<Void> task = () -> {
-                for (int i = start; i < end; i++) {
-                    for (int j = i + 1; j < numPunts; j++) {
-                        model.setSolucioSiEs(punts[i], punts[j]);
-                    }
-                }
-                return null;
-            };
-            futures.add(executor.submit(task));
+            futures.add(executor.submit(tareaDistancia(start, end, numPunts)));
         }
 
         // Esperem que tots els fils acabin
@@ -57,6 +49,17 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
         // Tanquem l'executor
         executor.shutdown();
+    }
+
+    private Callable<Void> tareaDistancia(int start, int end, int numPunts) {
+        return () -> {
+            for (int i = start; i < end; i++) {
+                for (int j = i + 1; j < numPunts; j++) {
+                    model.setSolucioSiEs(punts[i], punts[j]);
+                }
+            }
+            return null;
+        };
     }
 
     @Override

@@ -17,19 +17,19 @@
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/vista/TopPanel.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/Distribucio.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/vista/BottomPanel.java</file>
-            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/ConvexHullProcess.java</file>
+            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/procesos/BruteForceProcess.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/controlador/Notificar.java</file>
-            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/AbstractCalculProcess.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/controlador/Notificacio.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/Model.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/vista/Vista.java</file>
-            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/DivideAndConquerRecursiveTask.java</file>
+            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/procesos/AbstractCalculProcess.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/vista/GraphPanel.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/controlador/Controlador.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/Tipus.java</file>
+            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/procesos/DivideAndConquerRecursiveTask.java</file>
             <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/Metode.java</file>
-            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/BruteForceProcess.java</file>
-            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/DivideAndConquerProcess.java</file>
+            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/procesos/ConvexHullProcess.java</file>
+            <file>file:/C:/Users/Zer0/Documents/GitHub/Practica3/src/model/procesos/DivideAndConquerProcess.java</file>
         </group>
     </open-files>
 </project-private>

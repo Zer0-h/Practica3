@@ -33,7 +33,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
 
         // Construcció de la part inferior del convex hull
         for (Point2D.Double p : sortedPoints) {
-            while (hull.size() >= 2 && cross(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
+            while (hull.size() >= 2 && model.producteVectorial(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
                 hull.remove(hull.size() - 1);
             }
             hull.add(p);
@@ -43,7 +43,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
         int t = hull.size() + 1;
         for (int i = sortedPoints.size() - 2; i >= 0; i--) {
             Point2D.Double p = sortedPoints.get(i);
-            while (hull.size() >= t && cross(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
+            while (hull.size() >= t && model.producteVectorial(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
                 hull.remove(hull.size() - 1);
             }
             hull.add(p);
@@ -53,41 +53,23 @@ public class ConvexHullProcess extends AbstractCalculProcess {
         return hull;
     }
 
-    private double cross(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
-        return (b.getX() - a.getX()) * (c.getY() - a.getY()) - (b.getY() - a.getY()) * (c.getX() - a.getX());
-    }
-
-    private double rotatingCalipers(List<Point2D.Double> hull) {
-        int n = hull.size();
-        double maxDist = 0;
+    private void rotatingCalipers(List<Point2D.Double> hull) {
+        int hullSize = hull.size();
         int k = 1;
-        Point2D.Double bestP1 = null;
-        Point2D.Double bestP2 = null;
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < hullSize; i++) {
             while (true) {
-                double dist1 = hull.get(i).distance(hull.get((k + 1) % n));
-                double dist2 = hull.get(i).distance(hull.get(k % n));
+                double dist1 = hull.get(i).distance(hull.get((k + 1) % hullSize));
+                double dist2 = hull.get(i).distance(hull.get(k % hullSize));
 
                 if (dist1 > dist2) {
-                    k = (k + 1) % n;
+                    k = (k + 1) % hullSize;
                 } else {
-                    if (dist2 > maxDist) {
-                        maxDist = dist2;
-                        bestP1 = hull.get(i);
-                        bestP2 = hull.get(k % n);
-                    }
+                    model.setSolucioSiEs(hull.get(i), hull.get(k % hullSize));
                     break;
                 }
             }
         }
-
-        // Guarda la millor solució al model
-        if (bestP1 != null && bestP2 != null) {
-            model.setSolucioSiEs(bestP1, bestP2);
-        }
-
-        return maxDist;
     }
 
     @Override
