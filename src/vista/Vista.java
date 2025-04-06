@@ -12,25 +12,39 @@ import model.Metode;
 import model.Tipus;
 
 /**
+ * Classe Vista: Interfície gràfica de l'aplicació
+ * S'encarrega de mostrar els elements gràfics, gestionar els panells
+ * i interactuar amb el controlador.
+ *
  * @author tonitorres
  */
 public class Vista extends JFrame implements Notificar {
 
     private Controlador controlador;
-    private Model modelo;
+    private Model model;
 
-    // Panells
+    // Panells de la vista
     private TopPanel topPanel;
     private BottomPanel bottomPanel;
     private GraphPanel graphPanel;
 
+    /**
+     * Constructor per defecte.
+     */
     public Vista() {}
 
+    /**
+     * Constructor que inicialitza la vista amb el controlador.
+     * @param controlador Controlador de l'aplicació.
+     */
     public Vista(Controlador controlador) {
         this.controlador = controlador;
-        this.modelo = controlador.getModel();
+        this.model = controlador.getModel();
     }
 
+    /**
+     * Configura i mostra la finestra principal.
+     */
     public void mostrar() {
         setTitle("Pràctica 3 - Divideix i Venceràs");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,79 +52,119 @@ public class Vista extends JFrame implements Notificar {
         setSize(1200, 900);
         setLocationRelativeTo(null);
 
-        // Panell Superior
+        // Panell superior amb les opcions de configuració
         topPanel = new TopPanel(this);
         add(topPanel, BorderLayout.NORTH);
 
-        // Panell Central (Gràfic)
+        // Panell central per al gràfic
         graphPanel = new GraphPanel(800, 600);
         add(graphPanel, BorderLayout.CENTER);
 
-        // Panell Inferior
+        // Panell inferior per a informació i resultats
         bottomPanel = new BottomPanel();
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
 
-        modelo.setMidaPanel(graphPanel.getWidth(), graphPanel.getHeight());
+        // Ajustar la mida del panell en el model
+        model.setMidaPanel(graphPanel.getWidth(), graphPanel.getHeight());
     }
 
+    /**
+     * Repinta el panell gràfic.
+     */
     public void pintar() {
         graphPanel.repaint();
     }
 
-    public void setBestResult() {
-        bottomPanel.displaySolution(modelo.getPuntsSolucio());
+    /**
+     * Actualitza el resultat òptim en el panell inferior.
+     */
+    public void setMillorResultat() {
+        bottomPanel.displaySolution(model.getPuntsSolucio());
     }
 
-    public Model getModelo() {
-        return modelo;
+    /**
+     * Obté el model associat a la vista.
+     * @return Model de dades.
+     */
+    public Model getModel() {
+        return model;
     }
 
+    /**
+     * Acció en clicar el botó d'iniciar el càlcul.
+     */
     protected void startClicked() {
-        if (modelo.tePunts()) {
-            Tipus problema = topPanel.getProximity();
-            Metode typeSolution = topPanel.getSolution();
+        if (model.tePunts()) {
+            Tipus problema = topPanel.getProblema();
+            Metode tipusSolucio = topPanel.getSolucio();
 
-            modelo.setMinimizar(problema == Tipus.PROPER);
-            modelo.setMetode(typeSolution);
+            // Configura el model segons el tipus de problema
+            model.setMinimizar(problema == Tipus.PROPER);
+            model.setMetode(tipusSolucio);
 
-            bottomPanel.setTempsEstimat(modelo.calcularTempsEstimacio());
+            // Calcula el temps estimat abans d'iniciar
+            bottomPanel.setTempsEstimat(model.calcularTempsEstimacio());
 
+            // Mostra la barra de progrés i desactiva els botons
             bottomPanel.startProgress();
-            toggleInProgress(false);  // Disable the button
+            toggleInProgress(false);
 
+            // Notifica al controlador per començar el procés
             controlador.notificar(Notificacio.ARRANCAR);
         }
     }
 
+    /**
+     * Acció en clicar el botó de generar punts.
+     */
     protected void generatePointsClicked() {
-        Distribucio distribution = topPanel.getDistribution();
-        modelo.setDistribucio(distribution);
-        modelo.generarNuvolPunts(topPanel.getQuantityPoints());
-        graphPanel.colocaPunts(modelo.getPunts());
+        Distribucio distribucio = topPanel.getDistribucio();
+        model.setDistribucio(distribucio);
+        model.generarNuvolPunts(topPanel.getQuantitatPunts());
+        graphPanel.colocaPunts(model.getPunts());
         pintar();
     }
 
+    /**
+     * Finalitza el càlcul i mostra els resultats.
+     */
     private void finalitza() {
         bottomPanel.stopProgress();
-        toggleInProgress(true);  // Disable the button
-        graphPanel.dibuixaLineaSolucio(modelo.getPuntsSolucio());
-        bottomPanel.setTempsReal(modelo.getTemps());
-        setBestResult();
+        toggleInProgress(true);
+        graphPanel.dibuixaLineaSolucio(model.getPuntsSolucio());
+        bottomPanel.setTempsReal(model.getTemps());
+        setMillorResultat();
         pintar();
     }
 
-    protected void toggleInProgress(boolean inProgress) {
-        topPanel.toggleInProgress(inProgress);
+    /**
+     * Activa o desactiva els botons segons l'estat d'execució.
+     * @param enExecucio Estat d'execució (true si s'està executant).
+     */
+    protected void toggleInProgress(boolean enExecucio) {
+        topPanel.toggleInProgress(enExecucio);
     }
 
+    /**
+     * Mostra un missatge d'error en cas d'operació no vàlida.
+     */
     protected void invalid() {
         toggleInProgress(true);
         bottomPanel.stopProgress();
-        JOptionPane.showMessageDialog(null, "No es pot executar el procés" + Metode.CONVEX_HULL + " per a la parella de punts més propera", "OK!", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(
+            null,
+            "No es pot executar el procés " + Metode.CONVEX_HULL + " per a la parella de punts més propera",
+            "Error d'execució",
+            JOptionPane.WARNING_MESSAGE
+        );
     }
 
+    /**
+     * Mètode que rep notificacions del controlador.
+     * @param n Tipus de notificació.
+     */
     @Override
     public void notificar(Notificacio n) {
         switch (n) {

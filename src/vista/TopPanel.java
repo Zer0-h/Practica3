@@ -11,89 +11,136 @@ import model.Metode;
 import model.Tipus;
 
 /**
- * @author tonitorres
+ * Panell superior de la interfície gràfica.
+ * Inclou les opcions per seleccionar la distribució, el problema, el nombre de punts
+ * i el mètode de solució, així com botons per generar els punts i iniciar el càlcul.
+ *
+ * @autor tonitorres
  */
 public class TopPanel extends JPanel {
 
     private final Vista vista;
 
-    private JComboBox<Distribucio> distribution;
-    private JComboBox<Tipus> problema;
-    private JComboBox<Metode> solution;
-    private JComboBox<String> quantityPoints;
+    // Components d'interacció
+    private JComboBox<Distribucio> distribucioCombo;
+    private JComboBox<Tipus> problemaCombo;
+    private JComboBox<Metode> solucioCombo;
+    private JComboBox<String> quantitatPuntsCombo;
 
-    private JButton generateB;
-    private JButton startB;
+    private JButton botoGenerar;
+    private JButton botoIniciar;
 
-    public TopPanel(Vista v) {
-        this.vista = v;
+    /**
+     * Constructor que inicialitza el panell superior amb la vista associada.
+     *
+     * @param vista La vista principal de l'aplicació.
+     */
+    public TopPanel(Vista vista) {
+        this.vista = vista;
         this.init();
     }
 
+    /**
+     * Inicialitza el panell amb els components gràfics i els botons.
+     */
     private void init() {
+        // Configuració bàsica del panell
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
         this.setBackground(Color.LIGHT_GRAY);
 
-        // Distribució
-        JLabel distributionLabel = new JLabel("Distribució:");
-        this.add(distributionLabel);
+        // Etiqueta per la distribució
+        JLabel distribucioLabel = new JLabel("Distribució:");
+        this.add(distribucioLabel);
 
-        this.distribution = new JComboBox<>(Distribucio.values());
-        this.add(distribution);
+        // ComboBox per seleccionar la distribució
+        this.distribucioCombo = new JComboBox<>(Distribucio.values());
+        this.add(distribucioCombo);
 
-        // Proximitat
+        // Etiqueta per al tipus de problema
         JLabel problemaLabel = new JLabel("Problema:");
         this.add(problemaLabel);
 
-        this.problema = new JComboBox<>(Tipus.values());
-        this.add(problema);
+        // ComboBox per seleccionar el problema (proximitat o llunyania)
+        this.problemaCombo = new JComboBox<>(Tipus.values());
+        this.add(problemaCombo);
 
-        // Quantitat de Punts
-        JLabel quantityPointsLabel = new JLabel("Punts:");
-        this.add(quantityPointsLabel);
+        // Etiqueta per la quantitat de punts
+        JLabel quantitatPuntsLabel = new JLabel("Punts:");
+        this.add(quantitatPuntsLabel);
 
-        this.quantityPoints = new JComboBox<>(new String[]{"1000", "10000", "100000", "1000000", "2500000", "5000000", "7500000", "10000000"});
-        this.add(quantityPoints);
+        // ComboBox per seleccionar el nombre de punts a generar
+        this.quantitatPuntsCombo = new JComboBox<>(new String[]{
+            "1000", "10000", "100000", "1000000",
+            "2500000", "5000000", "7500000", "10000000"
+        });
+        this.add(quantitatPuntsCombo);
 
-        // Solució
-        JLabel solutionLabel = new JLabel("Solució:");
-        this.add(solutionLabel);
+        // Etiqueta per al mètode de solució
+        JLabel solucioLabel = new JLabel("Solució:");
+        this.add(solucioLabel);
 
-        this.solution = new JComboBox<>(Metode.values());
-        this.add(solution);
+        // ComboBox per seleccionar el mètode de solució
+        this.solucioCombo = new JComboBox<>(Metode.values());
+        this.add(solucioCombo);
 
         // Botó per generar punts
-        this.generateB = new JButton("Generar Punts");
-        this.add(generateB);
+        this.botoGenerar = new JButton("Generar Punts");
+        this.add(botoGenerar);
 
-        // Botó per iniciar càlcul
-        this.startB = new JButton("Iniciar");
-        this.add(startB);
+        // Botó per iniciar el càlcul
+        this.botoIniciar = new JButton("Iniciar");
+        this.add(botoIniciar);
 
-        // Accions dels botons
-        generateB.addActionListener(e -> vista.generatePointsClicked());
-        startB.addActionListener(e -> vista.startClicked());
+        // Assignació d'accions als botons
+        botoGenerar.addActionListener(e -> vista.generatePointsClicked());
+        botoIniciar.addActionListener(e -> vista.startClicked());
     }
 
-    protected void toggleInProgress(boolean inProgress) {
-        startB.setEnabled(inProgress);
-        generateB.setEnabled(inProgress);
+    /**
+     * Activa o desactiva els botons en funció de l'estat del procés.
+     *
+     * @param enExecucio Indica si el procés està en execució.
+     */
+    protected void toggleInProgress(boolean enExecucio) {
+        botoIniciar.setEnabled(enExecucio);
+        botoGenerar.setEnabled(enExecucio);
     }
 
     // GETTERS
-    protected Distribucio getDistribution() {
-        return (Distribucio) this.distribution.getSelectedItem();
+
+    /**
+     * Retorna la distribució seleccionada.
+     *
+     * @return Distribució seleccionada al ComboBox.
+     */
+    protected Distribucio getDistribucio() {
+        return (Distribucio) this.distribucioCombo.getSelectedItem();
     }
 
-    protected Tipus getProximity() {
-        return (Tipus) this.problema.getSelectedItem();
+    /**
+     * Retorna el tipus de problema seleccionat (proximitat o llunyania).
+     *
+     * @return Tipus de problema seleccionat al ComboBox.
+     */
+    protected Tipus getProblema() {
+        return (Tipus) this.problemaCombo.getSelectedItem();
     }
 
-    protected int getQuantityPoints() {
-        return Integer.parseInt((String) this.quantityPoints.getSelectedItem());
+    /**
+     * Retorna la quantitat de punts seleccionada.
+     *
+     * @return Nombre de punts seleccionat al ComboBox.
+     */
+    protected int getQuantitatPunts() {
+        return Integer.parseInt((String) this.quantitatPuntsCombo.getSelectedItem());
     }
 
-    protected Metode getSolution() {
-        return (Metode) this.solution.getSelectedItem();
+    /**
+     * Retorna el mètode de solució seleccionat.
+     *
+     * @return Mètode seleccionat al ComboBox.
+     */
+    protected Metode getSolucio() {
+        return (Metode) this.solucioCombo.getSelectedItem();
     }
 }
