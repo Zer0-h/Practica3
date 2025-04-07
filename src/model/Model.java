@@ -163,6 +163,13 @@ public class Model {
         }
     }
 
+    /**
+     * Posa els punts solucio.
+     * @param punts
+     */
+    public void setSolucio(Point2D.Double[] punts) {
+        puntsSolucio = punts;
+    }
 
     /**
      * Comprova si el model té punts generats.
@@ -214,7 +221,7 @@ public class Model {
         distribucio = d;
     }
 
-    public boolean isMinimizar() {
+    public boolean esMinimizar() {
         return minimizar;
     }
 

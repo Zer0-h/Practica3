@@ -51,7 +51,9 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
         Arrays.sort(copia, Comparator.comparingDouble(Point2D.Double::getX));
 
         // Invoquem el càlcul de forma paral·lela amb ForkJoinPool
-        forkJoinPool.invoke(new DivideAndConquerRecursiveTask(copia, 0, copia.length - 1, model));
+        Point2D.Double[] solucio = forkJoinPool.invoke(new DivideAndConquerRecursiveTask(copia, 0, copia.length - 1, minimaDistancia));
+
+        setSolucio(solucio[0], solucio[1]);
     }
 
     /**

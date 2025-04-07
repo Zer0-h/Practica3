@@ -85,7 +85,7 @@ public class BruteForceProcess extends AbstractCalculProcess {
         return () -> {
             for (int i = start; i < end; i++) {
                 for (int j = i + 1; j < numPunts; j++) {
-                    model.setSolucioSiEs(punts[i], punts[j]);
+                    setSolucio(punts[i], punts[j]);
                 }
             }
             return null;

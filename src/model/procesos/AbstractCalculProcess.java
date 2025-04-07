@@ -20,28 +20,37 @@ public abstract class AbstractCalculProcess extends Thread {
     protected final Model model; // Referència al model de dades
     protected final Point2D.Double[] punts; // Conjunt de punts a processar
     protected final boolean calculaCMInicial; // Flag per indicar si es calcula la constant multiplicativa inicial
+    protected Point2D.Double[] puntsSolucio;  // Solució específica del procés
+    protected double millorDistancia;
+    protected boolean minimaDistancia;
 
     /**
      * Constructor per a càlculs normals (utilitzant punts del model).
-     * @param controlador El controlador principal de l'aplicació.
+     * @param c El controlador principal de l'aplicació.
      */
-    public AbstractCalculProcess(Controlador controlador) {
-        this.controlador = controlador;
-        this.model = controlador.getModel();
-        this.punts = model.getPunts();
-        this.calculaCMInicial = false;
+    public AbstractCalculProcess(Controlador c) {
+        controlador = c;
+        model = controlador.getModel();
+        punts = model.getPunts();
+        calculaCMInicial = false;
+        puntsSolucio = null;
+        minimaDistancia = model.esMinimizar();
+        millorDistancia = minimaDistancia ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
     /**
      * Constructor per a càlculs específics (per calcular la constant multiplicativa).
-     * @param controlador El controlador principal de l'aplicació.
-     * @param punts Conjunt de punts generats per a càlcul inicial de constants.
+     * @param c El controlador principal de l'aplicació.
+     * @param p Conjunt de punts generats per a càlcul inicial de constants.
      */
-    public AbstractCalculProcess(Controlador controlador, Point2D.Double[] punts) {
-        this.controlador = controlador;
-        this.model = controlador.getModel();
-        this.punts = punts;
-        this.calculaCMInicial = true;
+    public AbstractCalculProcess(Controlador c, Point2D.Double[] p) {
+        controlador = c;
+        model = controlador.getModel();
+        punts = p;
+        calculaCMInicial = true;
+        puntsSolucio = null;
+        minimaDistancia = model.esMinimizar();
+        millorDistancia = minimaDistancia ? Double.MAX_VALUE : Double.MIN_VALUE;
     }
 
     /**
@@ -60,11 +69,38 @@ public abstract class AbstractCalculProcess extends Thread {
         // Actualització de la constant multiplicativa segons el mètode d'algorisme
         model.actualitzarConstant(punts.length, segons, getMetode());
         model.setTemps(segons);
+        model.setSolucio(puntsSolucio);
 
         // Notifiquem la finalització només si no és el càlcul de la constant inicial
         if (!this.calculaCMInicial) {
             controlador.notificar(Notificacio.FINALITZA);
         }
+    }
+
+    protected void setSolucio(Point2D.Double p1, Point2D.Double p2){
+        double distancia = p1.distance(p2);
+
+        if ((minimaDistancia && distancia < millorDistancia) || (!minimaDistancia && distancia > millorDistancia)) {
+            millorDistancia = distancia;
+            puntsSolucio = new Point2D.Double[]{p1, p2};
+        }
+    }
+
+    /**
+     * Mètode que retorna la solució calculada per aquest procés.
+     * @return Array amb els dos punts de la millor solució.
+     */
+    public Point2D.Double[] calcularSolucio() {
+        calcular();
+        return puntsSolucio;
+    }
+
+    /**
+     * Retorna la millor solució trobada pel procés.
+     * @return Conjunt de dos punts que formen la millor solució.
+     */
+    public Point2D.Double[] getPuntsSolucio() {
+        return puntsSolucio;
     }
 
     /**

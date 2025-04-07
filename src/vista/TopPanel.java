@@ -29,15 +29,16 @@ public class TopPanel extends JPanel {
 
     private JButton botoGenerar;
     private JButton botoIniciar;
+    private JButton botoComparativa;
 
     /**
      * Constructor que inicialitza el panell superior amb la vista associada.
      *
-     * @param vista La vista principal de l'aplicació.
+     * @param v La vista principal de l'aplicació.
      */
-    public TopPanel(Vista vista) {
-        this.vista = vista;
-        this.init();
+    public TopPanel(Vista v) {
+        vista = v;
+        init();
     }
 
     /**
@@ -45,55 +46,60 @@ public class TopPanel extends JPanel {
      */
     private void init() {
         // Configuració bàsica del panell
-        this.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        this.setBackground(Color.LIGHT_GRAY);
+        setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        setBackground(Color.LIGHT_GRAY);
 
         // Etiqueta per la distribució
         JLabel distribucioLabel = new JLabel("Distribució:");
-        this.add(distribucioLabel);
+        add(distribucioLabel);
 
         // ComboBox per seleccionar la distribució
-        this.distribucioCombo = new JComboBox<>(Distribucio.values());
-        this.add(distribucioCombo);
+        distribucioCombo = new JComboBox<>(Distribucio.values());
+        add(distribucioCombo);
 
         // Etiqueta per al tipus de problema
         JLabel problemaLabel = new JLabel("Problema:");
-        this.add(problemaLabel);
+        add(problemaLabel);
 
         // ComboBox per seleccionar el problema (proximitat o llunyania)
-        this.problemaCombo = new JComboBox<>(Tipus.values());
-        this.add(problemaCombo);
+        problemaCombo = new JComboBox<>(Tipus.values());
+        add(problemaCombo);
 
         // Etiqueta per la quantitat de punts
         JLabel quantitatPuntsLabel = new JLabel("Punts:");
-        this.add(quantitatPuntsLabel);
+        add(quantitatPuntsLabel);
 
         // ComboBox per seleccionar el nombre de punts a generar
-        this.quantitatPuntsCombo = new JComboBox<>(new String[]{
-            "1000", "10000", "100000", "1000000",
-            "2500000", "5000000", "7500000", "10000000"
+        quantitatPuntsCombo = new JComboBox<>(new String[]{
+            "10000", "100000", "1000000", "5000000", "10000000"
         });
-        this.add(quantitatPuntsCombo);
+        add(quantitatPuntsCombo);
 
         // Etiqueta per al mètode de solució
         JLabel solucioLabel = new JLabel("Solució:");
-        this.add(solucioLabel);
+        add(solucioLabel);
 
         // ComboBox per seleccionar el mètode de solució
-        this.solucioCombo = new JComboBox<>(Metode.values());
-        this.add(solucioCombo);
+        solucioCombo = new JComboBox<>(Metode.values());
+        add(solucioCombo);
 
         // Botó per generar punts
-        this.botoGenerar = new JButton("Generar Punts");
-        this.add(botoGenerar);
+        botoGenerar = new JButton("Generar Punts");
+        add(botoGenerar);
 
         // Botó per iniciar el càlcul
-        this.botoIniciar = new JButton("Iniciar");
-        this.add(botoIniciar);
+        botoIniciar = new JButton("Iniciar");
+        add(botoIniciar);
+
+
+        // Botó per comparar processos
+        botoComparativa = new JButton("Comparativa");
+        add(botoComparativa);
 
         // Assignació d'accions als botons
         botoGenerar.addActionListener(e -> vista.generatePointsClicked());
         botoIniciar.addActionListener(e -> vista.startClicked());
+        botoComparativa.addActionListener(e -> vista.comparativaClicked());
     }
 
     /**
@@ -114,7 +120,7 @@ public class TopPanel extends JPanel {
      * @return Distribució seleccionada al ComboBox.
      */
     protected Distribucio getDistribucio() {
-        return (Distribucio) this.distribucioCombo.getSelectedItem();
+        return (Distribucio) distribucioCombo.getSelectedItem();
     }
 
     /**
@@ -123,7 +129,7 @@ public class TopPanel extends JPanel {
      * @return Tipus de problema seleccionat al ComboBox.
      */
     protected Tipus getProblema() {
-        return (Tipus) this.problemaCombo.getSelectedItem();
+        return (Tipus) problemaCombo.getSelectedItem();
     }
 
     /**
@@ -132,7 +138,7 @@ public class TopPanel extends JPanel {
      * @return Nombre de punts seleccionat al ComboBox.
      */
     protected int getQuantitatPunts() {
-        return Integer.parseInt((String) this.quantitatPuntsCombo.getSelectedItem());
+        return Integer.parseInt((String) quantitatPuntsCombo.getSelectedItem());
     }
 
     /**
@@ -141,6 +147,6 @@ public class TopPanel extends JPanel {
      * @return Mètode seleccionat al ComboBox.
      */
     protected Metode getSolucio() {
-        return (Metode) this.solucioCombo.getSelectedItem();
+        return (Metode) solucioCombo.getSelectedItem();
     }
 }

@@ -101,7 +101,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
                     k = (k + 1) % hullSize;
                 } else {
                     // Guardem la millor solució al model
-                    model.setSolucioSiEs(hull.get(i), hull.get(k % hullSize));
+                    setSolucio(hull.get(i), hull.get(k % hullSize));
                     break;
                 }
             }

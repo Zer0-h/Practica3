@@ -5,8 +5,10 @@ import controlador.Controlador;
 import controlador.Notificacio;
 import controlador.Notificar;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import model.ComparativaResultat;
 import model.Distribucio;
 import model.Metode;
 import model.Tipus;
@@ -20,18 +22,14 @@ import model.Tipus;
  */
 public class Vista extends JFrame implements Notificar {
 
-    private Controlador controlador;
-    private Model model;
+    private final Controlador controlador;
+    private final Model model;
 
     // Panells de la vista
     private TopPanel topPanel;
     private BottomPanel bottomPanel;
     private GraphPanel graphPanel;
-
-    /**
-     * Constructor per defecte.
-     */
-    public Vista() {}
+    private ComparativaVista comparativaVista;
 
     /**
      * Constructor que inicialitza la vista amb el controlador.
@@ -49,7 +47,7 @@ public class Vista extends JFrame implements Notificar {
         setTitle("Pràctica 3 - Divideix i Venceràs");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        setSize(1200, 900);
+        setSize(1300, 900);
         setLocationRelativeTo(null);
 
         // Panell superior amb les opcions de configuració
@@ -57,7 +55,7 @@ public class Vista extends JFrame implements Notificar {
         add(topPanel, BorderLayout.NORTH);
 
         // Panell central per al gràfic
-        graphPanel = new GraphPanel(800, 600);
+        graphPanel = new GraphPanel(900, 600);
         add(graphPanel, BorderLayout.CENTER);
 
         // Panell inferior per a informació i resultats
@@ -97,12 +95,9 @@ public class Vista extends JFrame implements Notificar {
      */
     protected void startClicked() {
         if (model.tePunts()) {
-            Tipus problema = topPanel.getProblema();
-            Metode tipusSolucio = topPanel.getSolucio();
-
             // Configura el model segons el tipus de problema
-            model.setMinimizar(problema == Tipus.PROPER);
-            model.setMetode(tipusSolucio);
+            model.setMinimizar(topPanel.getProblema() == Tipus.PROPER);
+            model.setMetode(topPanel.getSolucio());
 
             // Calcula el temps estimat abans d'iniciar
             bottomPanel.setTempsEstimat(model.calcularTempsEstimacio());
@@ -125,6 +120,37 @@ public class Vista extends JFrame implements Notificar {
         model.generarNuvolPunts(topPanel.getQuantitatPunts());
         graphPanel.colocaPunts(model.getPunts());
         pintar();
+    }
+
+    /**
+     * Acció en clicar el botó de comparativa.
+     */
+    protected void comparativaClicked() {
+        if (model.tePunts()) {
+            // Mostra la barra de progrés durant la comparativa
+            comparativaVista = new ComparativaVista();
+            comparativaVista.setVisible(true);
+
+            model.setMinimizar(topPanel.getProblema() == Tipus.PROPER);
+
+            // Notifica el controlador per iniciar la comparativa
+            controlador.notificar(Notificacio.COMPARAR);
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "Genera punts abans de fer la comparativa.",
+                "Error",
+                JOptionPane.WARNING_MESSAGE
+            );
+        }
+    }
+
+    /**
+     * Mostra el resultat de la comparativa immediatament després que un procés finalitzi.
+     * @param resultat Resultat del procés.
+     */
+    public void mostrarResultatComparativa(ComparativaResultat resultat) {
+        comparativaVista.afegirResultat(resultat);
     }
 
     /**

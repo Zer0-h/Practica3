@@ -4,7 +4,6 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.concurrent.RecursiveTask;
-import model.Model;
 
 /**
  * Classe DivideAndConquerRecursiveTask: Implementa la tasca recursiva per calcular la parella de punts
@@ -14,35 +13,36 @@ import model.Model;
  *
  * @author tonitorres
  */
-public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
+public class DivideAndConquerRecursiveTask extends RecursiveTask<Point2D.Double[]> {
 
     private final Point2D.Double[] punts;  // Conjunt de punts a tractar
     private final int start, end;          // Índexs d'inici i final de la subtaula de punts
-    private final Model model;             // Model que conté les dades i la solució
+    private final boolean minimaDistancia;             // Model que conté les dades i la solució
 
     /**
      * Constructor per inicialitzar la tasca recursiva.
      *
-     * @param punts Conjunt de punts a processar.
-     * @param start Índex d'inici del subconjunt de punts.
-     * @param end Índex de final del subconjunt de punts.
-     * @param model El model de dades per actualitzar la solució.
+     * @param p Conjunt de punts a processar.
+     * @param s Índex d'inici del subconjunt de punts.
+     * @param e Índex de final del subconjunt de punts.
+     * @param m Si el problema és de trobar la parella mínima o màxima.
      */
-    public DivideAndConquerRecursiveTask(Point2D.Double[] punts, int start, int end, Model model) {
-        this.punts = punts;
-        this.start = start;
-        this.end = end;
-        this.model = model;
+    public DivideAndConquerRecursiveTask(Point2D.Double[] p, int s, int e, boolean m) {
+        punts = p;
+        start = s;
+        end = e;
+        minimaDistancia = m;
+
     }
 
     /**
      * Mètode principal que executa la tasca recursiva.
      * Divideix el problema si és prou gran, o el resol directament si és petit.
      *
-     * @return La millor distància trobada en el subconjunt de punts.
+     * @return La millor parella de punts trobada.
      */
     @Override
-    protected Double compute() {
+    protected Point2D.Double[] compute() {
         if (end - start <= 3) {
             return calcularDirectament(punts, start, end);
         }
@@ -50,69 +50,56 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
         int mid = (start + end) / 2;
 
         // Divideix el problema en dues tasques paral·leles
-        DivideAndConquerRecursiveTask leftTask = new DivideAndConquerRecursiveTask(punts, start, mid, model);
-        DivideAndConquerRecursiveTask rightTask = new DivideAndConquerRecursiveTask(punts, mid + 1, end, model);
+        DivideAndConquerRecursiveTask leftTask = new DivideAndConquerRecursiveTask(punts, start, mid, minimaDistancia);
+        DivideAndConquerRecursiveTask rightTask = new DivideAndConquerRecursiveTask(punts, mid + 1, end, minimaDistancia);
 
         // Llança la tasca esquerra i calcula la dreta
         leftTask.fork();
-        double distDreta = rightTask.compute();
-        double distEsq = leftTask.join();
+        Point2D.Double[] solucioDreta = rightTask.compute();
+        Point2D.Double[] solucioEsquerra = leftTask.join();
 
-        // Troba la millor distància entre els dos resultats
-        double millorDistancia = getMillorDistancia(distEsq, distDreta);
+        // Troba la millor solució entre les dues
+        Point2D.Double[] millorSolucio = getMillorSolucio(solucioEsquerra, solucioDreta);
 
-        // Combina els resultats de les subtaques per trobar la distància mínima a la franja
-        return combinarResultats(punts, start, end, mid, millorDistancia);
+        // Combina els resultats de les subtaques per trobar la millor solució a la franja
+        return combinarResultats(punts, start, end, mid, millorSolucio);
     }
 
     /**
-     * Calcula la millor distància entre dues.
-     *
-     * @param dist1 Primera distància.
-     * @param dist2 Segona distància.
-     * @return La millor (mínima o màxima) distància segons el mode (minimitzar o maximitzar).
+     * Troba la millor solució entre dues parelles de punts.
      */
-    private double getMillorDistancia(double dist1, double dist2) {
-        if (model.isMinimizar()) {
-            return Math.min(dist1, dist2);
-        } else {
-            return Math.max(dist1, dist2);
-        }
+    private Point2D.Double[] getMillorSolucio(Point2D.Double[] sol1, Point2D.Double[] sol2) {
+        if (sol1 == null) return sol2;
+        if (sol2 == null) return sol1;
+
+        double dist1 = sol1[0].distance(sol1[1]);
+        double dist2 = sol2[0].distance(sol2[1]);
+
+        return (minimaDistancia && dist1 < dist2) || (!minimaDistancia && dist1 > dist2) ? sol1 : sol2;
     }
 
     /**
-     * Calcula la distància directament si el conjunt de punts és petit.
-     *
-     * @param punts Conjunt de punts.
-     * @param start Índex d'inici.
-     * @param end Índex de final.
-     * @return La millor distància calculada.
+     * Calcula la millor solució directament si el conjunt de punts és petit.
      */
-    private double calcularDirectament(Point2D.Double[] punts, int start, int end) {
-        double millorDistancia = model.isMinimizar() ? Double.MAX_VALUE : Double.MIN_VALUE;
+    private Point2D.Double[] calcularDirectament(Point2D.Double[] punts, int start, int end) {
+        Point2D.Double[] millorSolucio = null;
 
         for (int i = start; i <= end; i++) {
             for (int j = i + 1; j <= end; j++) {
-                double d = punts[i].distance(punts[j]);
-                model.setSolucioSiEs(punts[i], punts[j]);
-                millorDistancia = getMillorDistancia(millorDistancia, d);
+                Point2D.Double[] p = new Point2D.Double[] {punts[i], punts[j]};
+
+                millorSolucio = getMillorSolucio(p, millorSolucio);
             }
         }
-        return millorDistancia;
+
+        return millorSolucio;
     }
 
     /**
-     * Combina els resultats de les subtaques per trobar la millor distància entre els punts
-     * de la franja situada al voltant del punt mig.
-     *
-     * @param punts Conjunt de punts.
-     * @param start Índex d'inici.
-     * @param end Índex de final.
-     * @param mid Índex del punt mig.
-     * @param millorDistancia Distància mínima trobada fins al moment.
-     * @return La millor distància després de combinar els resultats.
+     * Combina els resultats de les subtaques per trobar la millor solució a la franja.
      */
-    private double combinarResultats(Point2D.Double[] punts, int start, int end, int mid, double millorDistancia) {
+    private Point2D.Double[] combinarResultats(Point2D.Double[] punts, int start, int end, int mid, Point2D.Double[] millorSolucio) {
+        double millorDistancia = millorSolucio[0].distance(millorSolucio[1]);
         double midX = punts[mid].getX();
         Point2D.Double[] franja = new Point2D.Double[end - start + 1];
         int idx = 0;
@@ -130,12 +117,11 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Double> {
         // Compara les distàncies dins la franja
         for (int i = 0; i < idx; i++) {
             for (int j = i + 1; j < idx && (franja[j].getY() - franja[i].getY()) < millorDistancia; j++) {
-                double dist = franja[i].distance(franja[j]);
-                model.setSolucioSiEs(franja[i], franja[j]);
-                millorDistancia = getMillorDistancia(millorDistancia, dist);
+                millorSolucio = getMillorSolucio(new Point2D.Double[]{franja[i], franja[j]}, millorSolucio);
+                millorDistancia = millorSolucio[0].distance(millorSolucio[1]);
             }
         }
 
-        return millorDistancia;
+        return millorSolucio;
     }
 }

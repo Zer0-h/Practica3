@@ -11,4 +11,5 @@ public enum Notificacio {
     ARRANCAR,
     FINALITZA,
     INVALID,
+    COMPARAR,
 }
