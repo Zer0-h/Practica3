@@ -4,7 +4,8 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
- * Classe Model: representa les dades i la lògica del problema de trobar parelles
+ * Classe Model: representa les dades i la lògica del problema de trobar
+ * parelles
  * de punts més properes o més llunyanes en un núvol de punts generat.
  * Permet generar punts aleatoris segons diverses distribucions i calcular el
  * temps estimat segons el mètode d'execució.
@@ -35,7 +36,9 @@ public class Model {
     }
 
     /**
-     * Calcula el temps estimat en funció del nombre de punts (N) i el mètode seleccionat.
+     * Calcula el temps estimat en funció del nombre de punts (N) i el mètode
+     * seleccionat.
+     *
      * @return Temps estimat en segons.
      */
     public double calcularTempsEstimacio() {
@@ -43,10 +46,14 @@ public class Model {
         double tempsEstimat;
 
         switch (metode) {
-            case FORCA_BRUTA -> tempsEstimat = constantBruteForce * Math.pow(n, 2);
-            case DIVIDEIX -> tempsEstimat = constantDivideConquer * n * Math.log(n);
-            case CONVEX_HULL -> tempsEstimat = constantConvexHull * n * Math.log(n);
-            default -> throw new IllegalArgumentException("Mètode desconegut: " + metode);
+            case FORCA_BRUTA ->
+                tempsEstimat = constantBruteForce * Math.pow(n, 2);
+            case DIVIDEIX ->
+                tempsEstimat = constantDivideConquer * n * Math.log(n);
+            case CONVEX_HULL ->
+                tempsEstimat = constantConvexHull * n * Math.log(n);
+            default ->
+                throw new IllegalArgumentException("Mètode desconegut: " + metode);
         }
 
         return tempsEstimat;
@@ -54,21 +61,27 @@ public class Model {
 
     /**
      * Actualitza la constant multiplicativa després d'una execució.
-     * @param n Nombre de punts.
+     *
+     * @param n             Nombre de punts.
      * @param tempsExecucio Temps d'execució.
-     * @param metode Mètode utilitzat.
+     * @param metode        Mètode utilitzat.
      */
     public void actualitzarConstant(long n, double tempsExecucio, Metode metode) {
         switch (metode) {
-            case FORCA_BRUTA -> constantBruteForce = tempsExecucio / (n * n);
-            case DIVIDEIX -> constantDivideConquer = tempsExecucio / (n * Math.log(n));
-            case CONVEX_HULL -> constantConvexHull = tempsExecucio / (n * Math.log(n));
-            default -> throw new IllegalArgumentException("Mètode desconegut: " + metode);
+            case FORCA_BRUTA ->
+                constantBruteForce = tempsExecucio / (n * n);
+            case DIVIDEIX ->
+                constantDivideConquer = tempsExecucio / (n * Math.log(n));
+            case CONVEX_HULL ->
+                constantConvexHull = tempsExecucio / (n * Math.log(n));
+            default ->
+                throw new IllegalArgumentException("Mètode desconegut: " + metode);
         }
     }
 
     /**
      * Defineix la mida del panell de visualització.
+     *
      * @param amp Amplada del panell gràfic.
      * @param alt Altura del panell gràfic.
      */
@@ -79,6 +92,7 @@ public class Model {
 
     /**
      * Genera un conjunt de punts aleatoris segons la distribució seleccionada.
+     *
      * @param numeroPunts Nombre de punts a generar.
      */
     public void generarNuvolPunts(int numeroPunts) {
@@ -96,10 +110,11 @@ public class Model {
         }
     }
 
-
     /**
      * Genera un conjunt auxiliar de punts per al càlcul de constants.
+     *
      * @param n Nombre de punts a generar.
+     *
      * @return Array de punts generats.
      */
     public Point2D.Double[] generarPunts(int n) {
@@ -118,10 +133,14 @@ public class Model {
      */
     private double generarValor(Random rnd, int max) {
         return switch (this.distribucio) {
-            case GAUSSIAN -> generarValorGaussian(rnd, max);
-            case EXPONENCIAL -> generarValorExponencial(rnd, max);
-            case UNIFORME -> rnd.nextDouble() * max;
-            default -> throw new AssertionError("Distribució no reconeguda: " + distribucio);
+            case GAUSSIAN ->
+                generarValorGaussian(rnd, max);
+            case EXPONENCIAL ->
+                generarValorExponencial(rnd, max);
+            case UNIFORME ->
+                rnd.nextDouble() * max;
+            default ->
+                throw new AssertionError("Distribució no reconeguda: " + distribucio);
         };
     }
 
@@ -151,7 +170,9 @@ public class Model {
     }
 
     /**
-     * Revisa si la distància entre dos punts és una nova solució i la guarda si ho és.
+     * Revisa si la distància entre dos punts és una nova solució i la guarda si
+     * ho és.
+     *
      * @param punt1
      * @param punt2
      */
@@ -165,6 +186,7 @@ public class Model {
 
     /**
      * Posa els punts solucio.
+     *
      * @param punts
      */
     public void setSolucio(Point2D.Double[] punts) {
@@ -173,6 +195,7 @@ public class Model {
 
     /**
      * Comprova si el model té punts generats.
+     *
      * @return Cert si el model té punts, fals altrament.
      */
     public boolean tePunts() {
@@ -181,9 +204,11 @@ public class Model {
 
     /**
      * Calcula el producte vectorial entre tres punts.
+     *
      * @param punt1
      * @param punt2
      * @param punt3
+     *
      * @return Resultat del producte
      */
     public double producteVectorial(Point2D.Double punt1, Point2D.Double punt2, Point2D.Double punt3) {

@@ -10,6 +10,7 @@ public interface Notificar {
 
     /**
      * Mètode per rebre notificacions d'esdeveniments.
+     *
      * @param n El tipus de notificació a gestionar.
      */
     void notificar(Notificacio n);

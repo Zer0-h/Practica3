@@ -1,13 +1,13 @@
 package vista;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.geom.Point2D;
 import model.ComparativaResultat;
 
 /**
- * Classe ComparativaVista: Mostra una finestra amb una taula comparativa dels resultats dels diferents processos.
+ * Classe ComparativaVista: Mostra una finestra amb una taula comparativa dels
+ * resultats dels diferents processos.
  * Inclou un botó per tancar la finestra.
  *
  * @autor tonitorres
@@ -46,7 +46,7 @@ public class ComparativaVista extends JFrame {
     /**
      * Mètode per afegir un resultat nou a la taula.
      *
-     * @param resultat  Resultat del procés.
+     * @param resultat Resultat del procés.
      */
     public void afegirResultat(ComparativaResultat resultat) {
         String punt1Text = String.format("(%.2f, %.2f)", resultat.getSolucio()[0].getX(), resultat.getSolucio()[1].getY());

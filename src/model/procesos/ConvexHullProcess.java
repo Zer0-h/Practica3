@@ -8,11 +8,15 @@ import java.util.List;
 import model.Metode;
 
 /**
- * Classe ConvexHullProcess: Implementa el càlcul de la parella de punts més llunyana
- * utilitzant el mètode del convex hull amb Rotating Calipers (complexitat O(n·log(n))).
+ * Classe ConvexHullProcess: Implementa el càlcul de la parella de punts més
+ * llunyana
+ * utilitzant el mètode del convex hull amb Rotating Calipers (complexitat
+ * O(n·log(n))).
  *
- * Utilitza el concepte de la geometria computacional per calcular l'envolupant convexa
- * i després aplica l'algorisme de Rotating Calipers per trobar la distància màxima.
+ * Utilitza el concepte de la geometria computacional per calcular l'envolupant
+ * convexa
+ * i després aplica l'algorisme de Rotating Calipers per trobar la distància
+ * màxima.
  *
  * @author tonitorres
  */
@@ -20,6 +24,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
 
     /**
      * Constructor per defecte: utilitza els punts del model.
+     *
      * @param controlador El controlador de l'aplicació.
      */
     public ConvexHullProcess(Controlador controlador) {
@@ -28,15 +33,17 @@ public class ConvexHullProcess extends AbstractCalculProcess {
 
     /**
      * Constructor amb punts específics (utilitzat per a càlculs de constants).
+     *
      * @param controlador El controlador de l'aplicació.
-     * @param punts Conjunt de punts a utilitzar.
+     * @param punts       Conjunt de punts a utilitzar.
      */
     public ConvexHullProcess(Controlador controlador, Point2D.Double[] punts) {
         super(controlador, punts);
     }
 
     /**
-     * Mètode principal de càlcul que genera l'envolupant convexa i aplica el mètode
+     * Mètode principal de càlcul que genera l'envolupant convexa i aplica el
+     * mètode
      * de Rotating Calipers per trobar la parella de punts més llunyana.
      */
     @Override
@@ -46,8 +53,11 @@ public class ConvexHullProcess extends AbstractCalculProcess {
     }
 
     /**
-     * Calcula l'envolupant convexa d'un conjunt de punts utilitzant el mètode de Graham Scan.
+     * Calcula l'envolupant convexa d'un conjunt de punts utilitzant el mètode
+     * de Graham Scan.
+     *
      * @param points Conjunt de punts d'entrada.
+     *
      * @return Llista de punts que formen l'envolupant convexa.
      */
     private List<Point2D.Double> convexHull(Point2D.Double[] points) {
@@ -56,7 +66,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
         // Ordenem els punts per X i després per Y per garantir l'ordre correcte
         List<Point2D.Double> sortedPoints = new ArrayList<>(List.of(points));
         sortedPoints.sort(Comparator.comparingDouble((Point2D.Double p) -> p.getX())
-                                    .thenComparingDouble(p -> p.getY()));
+                .thenComparingDouble(p -> p.getY()));
 
         // Construcció de la part inferior del convex hull
         for (Point2D.Double p : sortedPoints) {
@@ -82,8 +92,10 @@ public class ConvexHullProcess extends AbstractCalculProcess {
     }
 
     /**
-     * Algorisme de Rotating Calipers per trobar la màxima distància entre parelles de punts
+     * Algorisme de Rotating Calipers per trobar la màxima distància entre
+     * parelles de punts
      * dins de l'envolupant convexa.
+     *
      * @param hull Llista de punts que formen l'envolupant convexa.
      */
     private void rotatingCalipers(List<Point2D.Double> hull) {
@@ -110,6 +122,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
 
     /**
      * Retorna el mètode utilitzat en aquesta classe (Convex Hull).
+     *
      * @return El mètode CONVEX_HULL.
      */
     @Override

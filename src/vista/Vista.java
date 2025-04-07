@@ -1,16 +1,15 @@
 package vista;
 
-import model.Model;
 import controlador.Controlador;
 import controlador.Notificacio;
 import controlador.Notificar;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import model.ComparativaResultat;
 import model.Distribucio;
 import model.Metode;
+import model.Model;
 import model.Tipus;
 
 /**
@@ -33,6 +32,7 @@ public class Vista extends JFrame implements Notificar {
 
     /**
      * Constructor que inicialitza la vista amb el controlador.
+     *
      * @param controlador Controlador de l'aplicació.
      */
     public Vista(Controlador controlador) {
@@ -84,6 +84,7 @@ public class Vista extends JFrame implements Notificar {
 
     /**
      * Obté el model associat a la vista.
+     *
      * @return Model de dades.
      */
     public Model getModel() {
@@ -137,16 +138,18 @@ public class Vista extends JFrame implements Notificar {
             controlador.notificar(Notificacio.COMPARAR);
         } else {
             JOptionPane.showMessageDialog(
-                this,
-                "Genera punts abans de fer la comparativa.",
-                "Error",
-                JOptionPane.WARNING_MESSAGE
+                    this,
+                    "Genera punts abans de fer la comparativa.",
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE
             );
         }
     }
 
     /**
-     * Mostra el resultat de la comparativa immediatament després que un procés finalitzi.
+     * Mostra el resultat de la comparativa immediatament després que un procés
+     * finalitzi.
+     *
      * @param resultat Resultat del procés.
      */
     public void mostrarResultatComparativa(ComparativaResultat resultat) {
@@ -167,6 +170,7 @@ public class Vista extends JFrame implements Notificar {
 
     /**
      * Activa o desactiva els botons segons l'estat d'execució.
+     *
      * @param enExecucio Estat d'execució (true si s'està executant).
      */
     protected void toggleInProgress(boolean enExecucio) {
@@ -180,22 +184,25 @@ public class Vista extends JFrame implements Notificar {
         toggleInProgress(true);
         bottomPanel.stopProgress();
         JOptionPane.showMessageDialog(
-            null,
-            "No es pot executar el procés " + Metode.CONVEX_HULL + " per a la parella de punts més propera",
-            "Error d'execució",
-            JOptionPane.WARNING_MESSAGE
+                null,
+                "No es pot executar el procés " + Metode.CONVEX_HULL + " per a la parella de punts més propera",
+                "Error d'execució",
+                JOptionPane.WARNING_MESSAGE
         );
     }
 
     /**
      * Mètode que rep notificacions del controlador.
+     *
      * @param n Tipus de notificació.
      */
     @Override
     public void notificar(Notificacio n) {
         switch (n) {
-            case Notificacio.FINALITZA -> finalitza();
-            case Notificacio.INVALID -> invalid();
+            case Notificacio.FINALITZA ->
+                finalitza();
+            case Notificacio.INVALID ->
+                invalid();
         }
     }
 }

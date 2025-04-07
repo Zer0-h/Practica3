@@ -6,7 +6,8 @@ import java.util.Comparator;
 import java.util.concurrent.RecursiveTask;
 
 /**
- * Classe DivideAndConquerRecursiveTask: Implementa la tasca recursiva per calcular la parella de punts
+ * Classe DivideAndConquerRecursiveTask: Implementa la tasca recursiva per
+ * calcular la parella de punts
  * més propera o més llunyana utilitzant l'algorisme Divideix i Venceràs.
  *
  * Utilitza el model Fork/Join per aprofitar el paral·lelisme en el càlcul.
@@ -17,7 +18,7 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Point2D.Double[
 
     private final Point2D.Double[] punts;  // Conjunt de punts a tractar
     private final int start, end;          // Índexs d'inici i final de la subtaula de punts
-    private final boolean minimaDistancia;             // Model que conté les dades i la solució
+    private final boolean minimaDistancia; // Model que conté les dades i la solució
 
     /**
      * Constructor per inicialitzar la tasca recursiva.
@@ -69,8 +70,12 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Point2D.Double[
      * Troba la millor solució entre dues parelles de punts.
      */
     private Point2D.Double[] getMillorSolucio(Point2D.Double[] sol1, Point2D.Double[] sol2) {
-        if (sol1 == null) return sol2;
-        if (sol2 == null) return sol1;
+        if (sol1 == null) {
+            return sol2;
+        }
+        if (sol2 == null) {
+            return sol1;
+        }
 
         double dist1 = sol1[0].distance(sol1[1]);
         double dist2 = sol2[0].distance(sol2[1]);
@@ -86,7 +91,7 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Point2D.Double[
 
         for (int i = start; i <= end; i++) {
             for (int j = i + 1; j <= end; j++) {
-                Point2D.Double[] p = new Point2D.Double[] {punts[i], punts[j]};
+                Point2D.Double[] p = new Point2D.Double[]{punts[i], punts[j]};
 
                 millorSolucio = getMillorSolucio(p, millorSolucio);
             }
@@ -96,7 +101,8 @@ public class DivideAndConquerRecursiveTask extends RecursiveTask<Point2D.Double[
     }
 
     /**
-     * Combina els resultats de les subtaques per trobar la millor solució a la franja.
+     * Combina els resultats de les subtaques per trobar la millor solució a la
+     * franja.
      */
     private Point2D.Double[] combinarResultats(Point2D.Double[] punts, int start, int end, int mid, Point2D.Double[] millorSolucio) {
         double millorDistancia = millorSolucio[0].distance(millorSolucio[1]);

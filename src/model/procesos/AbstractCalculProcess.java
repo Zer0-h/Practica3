@@ -7,9 +7,11 @@ import model.Metode;
 import model.Model;
 
 /**
- * Classe AbstractCalculProcess: Classe abstracta per gestionar el procés de càlcul
+ * Classe AbstractCalculProcess: Classe abstracta per gestionar el procés de
+ * càlcul
  * d'algorismes per trobar la parella de punts més propera o més llunyana.
- * Utilitza el patró plantilla per definir el flux d'execució comú i delega el càlcul
+ * Utilitza el patró plantilla per definir el flux d'execució comú i delega el
+ * càlcul
  * específic als subclasses.
  *
  * @author tonitorres
@@ -26,6 +28,7 @@ public abstract class AbstractCalculProcess extends Thread {
 
     /**
      * Constructor per a càlculs normals (utilitzant punts del model).
+     *
      * @param c El controlador principal de l'aplicació.
      */
     public AbstractCalculProcess(Controlador c) {
@@ -39,7 +42,9 @@ public abstract class AbstractCalculProcess extends Thread {
     }
 
     /**
-     * Constructor per a càlculs específics (per calcular la constant multiplicativa).
+     * Constructor per a càlculs específics (per calcular la constant
+     * multiplicativa).
+     *
      * @param c El controlador principal de l'aplicació.
      * @param p Conjunt de punts generats per a càlcul inicial de constants.
      */
@@ -77,7 +82,7 @@ public abstract class AbstractCalculProcess extends Thread {
         }
     }
 
-    protected void setSolucio(Point2D.Double p1, Point2D.Double p2){
+    protected void setSolucio(Point2D.Double p1, Point2D.Double p2) {
         double distancia = p1.distance(p2);
 
         if ((minimaDistancia && distancia < millorDistancia) || (!minimaDistancia && distancia > millorDistancia)) {
@@ -88,6 +93,7 @@ public abstract class AbstractCalculProcess extends Thread {
 
     /**
      * Mètode que retorna la solució calculada per aquest procés.
+     *
      * @return Array amb els dos punts de la millor solució.
      */
     public Point2D.Double[] calcularSolucio() {
@@ -97,6 +103,7 @@ public abstract class AbstractCalculProcess extends Thread {
 
     /**
      * Retorna la millor solució trobada pel procés.
+     *
      * @return Conjunt de dos punts que formen la millor solució.
      */
     public Point2D.Double[] getPuntsSolucio() {
@@ -104,14 +111,17 @@ public abstract class AbstractCalculProcess extends Thread {
     }
 
     /**
-     * Mètode abstracte que implementarà el càlcul específic segons l'algorisme utilitzat.
+     * Mètode abstracte que implementarà el càlcul específic segons l'algorisme
+     * utilitzat.
      * Aquest mètode serà implementat per les subclasses concretes.
      */
     protected abstract void calcular();
 
     /**
      * Mètode abstracte que retorna el mètode algorísmic concret.
-     * @return El mètode utilitzat (FUERZA_BRUTA, DIVIDE_Y_VENCERAS o CONVEX_HULL).
+     *
+     * @return El mètode utilitzat (FUERZA_BRUTA, DIVIDE_Y_VENCERAS o
+     *         CONVEX_HULL).
      */
     protected abstract Metode getMetode();
 }

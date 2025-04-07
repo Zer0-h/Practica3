@@ -1,11 +1,12 @@
 package vista;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import javax.swing.*;
 
 /**
- * Panell inferior de la interfície gràfica que mostra el temps estimat i el temps d'execució real,
+ * Panell inferior de la interfície gràfica que mostra el temps estimat i el
+ * temps d'execució real,
  * així com els resultats de la solució i una barra de progrés.
  *
  * @autor tonitorres
@@ -18,7 +19,8 @@ public class BottomPanel extends JPanel {
     private double tempsEstimat;          // Temps estimat d'execució
 
     /**
-     * Constructor que inicialitza el panell inferior amb la disposició i els components necessaris.
+     * Constructor que inicialitza el panell inferior amb la disposició i els
+     * components necessaris.
      */
     public BottomPanel() {
         setLayout(new BorderLayout());
@@ -63,7 +65,8 @@ public class BottomPanel extends JPanel {
     /**
      * Actualitza l'etiqueta que mostra el temps estimat i el temps real.
      *
-     * @param tempsReal Temps real d'execució (pot ser null si encara no està disponible).
+     * @param tempsReal Temps real d'execució (pot ser null si encara no està
+     *                  disponible).
      */
     private void actualitzaEtiquetaTemps(Double tempsReal) {
         String text = (tempsReal == null)

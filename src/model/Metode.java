@@ -4,12 +4,14 @@ package model;
  * Enum Metode: Representa els diferents mètodes algorísmics per calcular
  * la parella de punts més pròxima o més distant en un conjunt de punts.
  *
- * Cada mètode té una descripció associada que inclou la complexitat computacional.
+ * Cada mètode té una descripció associada que inclou la complexitat
+ * computacional.
  *
  * Tipus de mètodes:
  * - FORCA_BRUTA: Algorisme clàssic amb complexitat O(n²).
  * - DIVIDEIX: Algorisme de Divideix i Venceràs amb complexitat O(n·log(n)).
- * - CONVEX_HULL: Algorisme basat en Convex Hull amb Rotating Calipers amb complexitat O(n·log(n)).
+ * - CONVEX_HULL: Algorisme basat en Convex Hull amb Rotating Calipers amb
+ * complexitat O(n·log(n)).
  *
  * @author tonitorres
  */
@@ -23,7 +25,8 @@ public enum Metode {
     /**
      * Constructor per inicialitzar la descripció del mètode.
      *
-     * @param description La descripció textual del mètode i la seva complexitat.
+     * @param description La descripció textual del mètode i la seva
+     *                    complexitat.
      */
     Metode(String d) {
         description = d;

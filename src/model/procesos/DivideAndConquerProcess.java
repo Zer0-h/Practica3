@@ -8,10 +8,13 @@ import java.util.concurrent.ForkJoinPool;
 import model.Metode;
 
 /**
- * Classe DivideAndConquerProcess: Implementa el càlcul de la parella de punts més propera
- * o més llunyana utilitzant el mètode Divideix i Venceràs (complexitat O(n·log(n))).
+ * Classe DivideAndConquerProcess: Implementa el càlcul de la parella de punts
+ * més propera
+ * o més llunyana utilitzant el mètode Divideix i Venceràs (complexitat
+ * O(n·log(n))).
  *
- * Utilitza un ForkJoinPool per executar tasques paral·leles i aprofitar al màxim els recursos de la CPU.
+ * Utilitza un ForkJoinPool per executar tasques paral·leles i aprofitar al
+ * màxim els recursos de la CPU.
  *
  * @author tonitorres
  */
@@ -22,6 +25,7 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
 
     /**
      * Constructor per defecte: utilitza els punts del model.
+     *
      * @param controlador El controlador de l'aplicació.
      */
     public DivideAndConquerProcess(Controlador controlador) {
@@ -30,15 +34,17 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
 
     /**
      * Constructor amb punts específics (utilitzat per a càlculs de constants).
+     *
      * @param controlador El controlador de l'aplicació.
-     * @param punts Conjunt de punts a utilitzar.
+     * @param punts       Conjunt de punts a utilitzar.
      */
     public DivideAndConquerProcess(Controlador controlador, Point2D.Double[] punts) {
         super(controlador, punts);
     }
 
     /**
-     * Mètode principal de càlcul que executa l'algorisme Divideix i Venceràs per trobar la
+     * Mètode principal de càlcul que executa l'algorisme Divideix i Venceràs
+     * per trobar la
      * parella de punts més propera o més llunyana, aprofitant el paral·lelisme.
      */
     @Override
@@ -58,6 +64,7 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
 
     /**
      * Retorna el mètode utilitzat en aquesta classe (Divideix i Venceràs).
+     *
      * @return El mètode DIVIDEIX.
      */
     @Override

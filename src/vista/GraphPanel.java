@@ -1,11 +1,12 @@
 package vista;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import javax.swing.*;
 
 /**
- * Panell gràfic que representa els punts generats i la línia que connecta la millor solució trobada.
+ * Panell gràfic que representa els punts generats i la línia que connecta la
+ * millor solució trobada.
  * Es mostra com una àrea de dibuix dins de la interfície gràfica.
  *
  * @author tonitorres
@@ -16,10 +17,11 @@ public class GraphPanel extends JPanel {
     private Point2D.Double[] puntsSolucio; // Parella de punts que formen la millor solució
 
     /**
-     * Constructor que inicialitza el panell gràfic amb les dimensions especificades.
+     * Constructor que inicialitza el panell gràfic amb les dimensions
+     * especificades.
      *
      * @param amplada Amplada del panell gràfic.
-     * @param altura Altura del panell gràfic.
+     * @param altura  Altura del panell gràfic.
      */
     public GraphPanel(int amplada, int altura) {
         setPreferredSize(new Dimension(amplada, altura));
@@ -27,7 +29,8 @@ public class GraphPanel extends JPanel {
     }
 
     /**
-     * Mètode que s'executa automàticament per pintar els components gràfics dins el panell.
+     * Mètode que s'executa automàticament per pintar els components gràfics
+     * dins el panell.
      *
      * @param g L'objecte gràfic utilitzat per dibuixar.
      */
@@ -52,7 +55,7 @@ public class GraphPanel extends JPanel {
         if (puntsSolucio != null && puntsSolucio[0] != null && puntsSolucio[1] != null) {
             g2d.setColor(Color.RED); // Color per a la línia de solució
             g2d.drawLine((int) puntsSolucio[0].getX(), (int) puntsSolucio[0].getY(),
-                         (int) puntsSolucio[1].getX(), (int) puntsSolucio[1].getY());
+                    (int) puntsSolucio[1].getX(), (int) puntsSolucio[1].getY());
         }
     }
 
@@ -70,7 +73,8 @@ public class GraphPanel extends JPanel {
     /**
      * Dibuixa la línia que uneix la millor solució trobada.
      *
-     * @param millorSolucio Array amb els dos punts que formen la millor solució.
+     * @param millorSolucio Array amb els dos punts que formen la millor
+     *                      solució.
      */
     public void dibuixaLineaSolucio(Point2D.Double[] millorSolucio) {
         this.puntsSolucio = millorSolucio;

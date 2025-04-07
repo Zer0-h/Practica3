@@ -12,8 +12,10 @@ import model.Tipus;
 
 /**
  * Panell superior de la interfície gràfica.
- * Inclou les opcions per seleccionar la distribució, el problema, el nombre de punts
- * i el mètode de solució, així com botons per generar els punts i iniciar el càlcul.
+ * Inclou les opcions per seleccionar la distribució, el problema, el nombre de
+ * punts
+ * i el mètode de solució, així com botons per generar els punts i iniciar el
+ * càlcul.
  *
  * @autor tonitorres
  */
@@ -91,7 +93,6 @@ public class TopPanel extends JPanel {
         botoIniciar = new JButton("Iniciar");
         add(botoIniciar);
 
-
         // Botó per comparar processos
         botoComparativa = new JButton("Comparativa");
         add(botoComparativa);
@@ -113,7 +114,6 @@ public class TopPanel extends JPanel {
     }
 
     // GETTERS
-
     /**
      * Retorna la distribució seleccionada.
      *

@@ -3,7 +3,7 @@ package model;
 /**
  * Enum Distribucio: Representa els diferents tipus de distribució
  * utilitzats per generar punts en el model.
- * 
+ *
  * Cada distribució té una descripció associada per a la seva visualització.
  *
  * Tipus de distribució:

@@ -12,7 +12,8 @@ import java.util.concurrent.Future;
 import model.Metode;
 
 /**
- * Classe BruteForceProcess: Implementa el càlcul de la parella de punts més propera o més llunyana
+ * Classe BruteForceProcess: Implementa el càlcul de la parella de punts més
+ * propera o més llunyana
  * utilitzant el mètode de força bruta (complexitat O(n²)).
  *
  * Utilitza paral·lelisme amb un ExecutorService per optimitzar el càlcul.
@@ -24,6 +25,7 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
     /**
      * Constructor per defecte: utilitza els punts del model.
+     *
      * @param controlador El controlador de l'aplicació.
      */
     public BruteForceProcess(Controlador controlador) {
@@ -32,15 +34,17 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
     /**
      * Constructor amb punts específics (utilitzat per a càlculs de constants).
+     *
      * @param controlador El controlador de l'aplicació.
-     * @param punts Conjunt de punts a utilitzar.
+     * @param punts       Conjunt de punts a utilitzar.
      */
     public BruteForceProcess(Controlador controlador, Point2D.Double[] punts) {
         super(controlador, punts);
     }
 
     /**
-     * Mètode principal de càlcul. Divideix els punts en blocs per paral·lelitzar el càlcul
+     * Mètode principal de càlcul. Divideix els punts en blocs per
+     * paral·lelitzar el càlcul
      * de distàncies utilitzant múltiples fils.
      */
     @Override
@@ -76,9 +80,11 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
     /**
      * Crea una tasca de càlcul de distància per a un bloc de punts.
-     * @param start Índex d'inici del bloc.
-     * @param end Índex de final del bloc.
+     *
+     * @param start    Índex d'inici del bloc.
+     * @param end      Índex de final del bloc.
      * @param numPunts Nombre total de punts.
+     *
      * @return Una tasca Callable que calcula les distàncies en el bloc indicat.
      */
     private Callable<Void> crearTascaDistancia(int start, int end, int numPunts) {
@@ -94,6 +100,7 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
     /**
      * Retorna el mètode de càlcul utilitzat en aquesta classe (Força Bruta).
+     *
      * @return El mètode FORCA_BRUTA.
      */
     @Override
