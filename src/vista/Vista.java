@@ -1,14 +1,11 @@
 package vista;
 
 import controlador.Controlador;
-import controlador.Notificacio;
-import controlador.Notificar;
 import java.awt.*;
 import javax.swing.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import model.ComparativaResultat;
 import model.Distribucio;
-import model.Metode;
 import model.Model;
 import model.Tipus;
 
@@ -19,7 +16,7 @@ import model.Tipus;
  *
  * @author tonitorres
  */
-public class Vista extends JFrame implements Notificar {
+public class Vista extends JFrame {
 
     private final Controlador controlador;
     private final Model model;
@@ -108,7 +105,7 @@ public class Vista extends JFrame implements Notificar {
             toggleInProgress(false);
 
             // Notifica al controlador per començar el procés
-            controlador.notificar(Notificacio.ARRANCAR);
+            controlador.iniciarProces();
         }
     }
 
@@ -135,7 +132,7 @@ public class Vista extends JFrame implements Notificar {
             model.setMinimizar(topPanel.getProblema() == Tipus.PROPER);
 
             // Notifica el controlador per iniciar la comparativa
-            controlador.notificar(Notificacio.COMPARAR);
+            controlador.comparativaProcessos();
         } else {
             JOptionPane.showMessageDialog(
                     this,
@@ -159,7 +156,7 @@ public class Vista extends JFrame implements Notificar {
     /**
      * Finalitza el càlcul i mostra els resultats.
      */
-    private void finalitza() {
+    public void finalitza() {
         bottomPanel.stopProgress();
         toggleInProgress(true);
         graphPanel.dibuixaLineaSolucio(model.getPuntsSolucio());
@@ -180,29 +177,14 @@ public class Vista extends JFrame implements Notificar {
     /**
      * Mostra un missatge d'error en cas d'operació no vàlida.
      */
-    protected void invalid() {
+    public void errorExecucio(String message) {
         toggleInProgress(true);
         bottomPanel.stopProgress();
         JOptionPane.showMessageDialog(
                 null,
-                "No es pot executar el procés " + Metode.CONVEX_HULL + " per a la parella de punts més propera",
+                message,
                 "Error d'execució",
                 JOptionPane.WARNING_MESSAGE
         );
-    }
-
-    /**
-     * Mètode que rep notificacions del controlador.
-     *
-     * @param n Tipus de notificació.
-     */
-    @Override
-    public void notificar(Notificacio n) {
-        switch (n) {
-            case Notificacio.FINALITZA ->
-                finalitza();
-            case Notificacio.INVALID ->
-                invalid();
-        }
     }
 }

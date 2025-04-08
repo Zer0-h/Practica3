@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.SwingWorker;
 import model.ComparativaResultat;
+import model.Metode;
 import static model.Metode.CONVEX_HULL;
 import static model.Metode.DIVIDEIX;
 import static model.Metode.FORCA_BRUTA;
@@ -30,7 +32,7 @@ import vista.Vista;
  *
  * @author tonitorres
  */
-public class Controlador implements Notificar {
+public class Controlador {
 
     private Model model;
     private Vista vista;
@@ -60,9 +62,9 @@ public class Controlador implements Notificar {
         AbstractCalculProcess procesConvexHull = new ConvexHullProcess(this, punts);
 
         // Iniciar els processos de forma concurrent
-        procesBruteForce.start();
-        procesDivideConquer.start();
-        procesConvexHull.start();
+        procesBruteForce.run();
+        procesDivideConquer.run();
+        procesConvexHull.run();
     }
 
     // Inicia el procés de càlcul segons el mètode seleccionat
@@ -84,7 +86,7 @@ public class Controlador implements Notificar {
             case CONVEX_HULL -> {
                 // Comprovació de validesa: el convex hull no serveix per a la parella més propera
                 if (model.esMinimizar()) {
-                    vista.notificar(Notificacio.INVALID);
+                    vista.errorExecucio("No es pot executar el procés " + Metode.CONVEX_HULL + " per a la parella de punts més propera");
                     return;
                 } else {
                     proces = new ConvexHullProcess(this);
@@ -94,8 +96,26 @@ public class Controlador implements Notificar {
                 throw new IllegalArgumentException("Error: Mètode desconegut en arrencada");
         }
 
-        // Iniciar el procés seleccionat
-        proces.start();
+        long tempsInicial = System.nanoTime();
+
+        // Llança el procés en segon pla
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                proces.run();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                long tempsExecucio = System.nanoTime() - tempsInicial;
+                double segons = tempsExecucio / 1_000_000_000.0;
+                model.setTemps(segons);
+                model.setSolucio(proces.getPuntsSolucio());
+                vista.finalitza();
+            }
+        };
+        worker.execute();
     }
 
     /**
@@ -170,20 +190,5 @@ public class Controlador implements Notificar {
     // Obtenir la vista actual
     public Vista getVista() {
         return vista;
-    }
-
-    // Mètode per gestionar notificacions entre el model, la vista i el controlador
-    @Override
-    public void notificar(Notificacio notificacio) {
-        switch (notificacio) {
-            case Notificacio.ARRANCAR ->
-                iniciarProces();
-            case Notificacio.FINALITZA -> {
-                model.setMostrarLineaSolucio(true); // Mostrar la línia de solució quan finalitzi el càlcul
-                vista.notificar(notificacio);
-            }
-            case Notificacio.COMPARAR ->
-                comparativaProcessos();
-        }
     }
 }

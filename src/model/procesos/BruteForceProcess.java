@@ -4,8 +4,6 @@ import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -62,40 +60,16 @@ public class BruteForceProcess extends AbstractCalculProcess {
             int start = t * blockSize;
             int end = (t == numThreads - 1) ? numPunts : (t + 1) * blockSize;
 
-            futures.add(executor.submit(crearTascaDistancia(start, end, numPunts)));
-        }
-
-        // Esperem que tots els fils acabin
-        for (Future<Void> future : futures) {
-            try {
-                future.get(); // Esperem el resultat del fil
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Tanquem l'executor
-        executor.shutdown();
-    }
-
-    /**
-     * Crea una tasca de càlcul de distància per a un bloc de punts.
-     *
-     * @param start    Índex d'inici del bloc.
-     * @param end      Índex de final del bloc.
-     * @param numPunts Nombre total de punts.
-     *
-     * @return Una tasca Callable que calcula les distàncies en el bloc indicat.
-     */
-    private Callable<Void> crearTascaDistancia(int start, int end, int numPunts) {
-        return () -> {
-            for (int i = start; i < end; i++) {
-                for (int j = i + 1; j < numPunts; j++) {
-                    setSolucio(punts[i], punts[j]);
+            executor.execute(() -> {
+                for (int i = start; i < end; i++) {
+                    for (int j = i + 1; j < numPunts; j++) {
+                        setSolucio(punts[i], punts[j]);
+                    }
                 }
-            }
-            return null;
-        };
+            });
+        }
+
+        executor.shutdown();
     }
 
     /**

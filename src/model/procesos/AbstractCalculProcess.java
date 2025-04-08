@@ -1,7 +1,6 @@
 package model.procesos;
 
 import controlador.Controlador;
-import controlador.Notificacio;
 import java.awt.geom.Point2D;
 import model.Metode;
 import model.Model;
@@ -16,12 +15,11 @@ import model.Model;
  *
  * @author tonitorres
  */
-public abstract class AbstractCalculProcess extends Thread {
+public abstract class AbstractCalculProcess implements Runnable {
 
-    protected final Controlador controlador; // Referència al controlador principal
-    protected final Model model; // Referència al model de dades
-    protected final Point2D.Double[] punts; // Conjunt de punts a processar
-    protected final boolean calculaCMInicial; // Flag per indicar si es calcula la constant multiplicativa inicial
+    protected Controlador controlador; // Referència al controlador principal
+    protected Model model; // Referència al model de dades
+    protected Point2D.Double[] punts; // Conjunt de punts a processar
     protected Point2D.Double[] puntsSolucio;  // Solució específica del procés
     protected double millorDistancia;
     protected boolean minimaDistancia;
@@ -32,13 +30,7 @@ public abstract class AbstractCalculProcess extends Thread {
      * @param c El controlador principal de l'aplicació.
      */
     public AbstractCalculProcess(Controlador c) {
-        controlador = c;
-        model = controlador.getModel();
-        punts = model.getPunts();
-        calculaCMInicial = false;
-        puntsSolucio = null;
-        minimaDistancia = model.esMinimizar();
-        millorDistancia = minimaDistancia ? Double.MAX_VALUE : Double.MIN_VALUE;
+        initValues(c, null);
     }
 
     /**
@@ -49,13 +41,15 @@ public abstract class AbstractCalculProcess extends Thread {
      * @param p Conjunt de punts generats per a càlcul inicial de constants.
      */
     public AbstractCalculProcess(Controlador c, Point2D.Double[] p) {
+        initValues(c, p);
+    }
+
+    private void initValues(Controlador c, Point2D.Double[] p) {
         controlador = c;
         model = controlador.getModel();
-        punts = p;
-        calculaCMInicial = true;
-        puntsSolucio = null;
         minimaDistancia = model.esMinimizar();
         millorDistancia = minimaDistancia ? Double.MAX_VALUE : Double.MIN_VALUE;
+        punts = p != null ? p : model.getPunts();
     }
 
     /**
@@ -64,22 +58,7 @@ public abstract class AbstractCalculProcess extends Thread {
      */
     @Override
     public void run() {
-        long tempsInicial = System.nanoTime();
-        calcular(); // Mètode abstracte per realitzar el càlcul específic
-        long tempsExecucio = System.nanoTime() - tempsInicial;
-
-        // Convertim el temps a segons
-        double segons = tempsExecucio / 1_000_000_000.0;
-
-        // Actualització de la constant multiplicativa segons el mètode d'algorisme
-        model.actualitzarConstant(punts.length, segons, getMetode());
-        model.setTemps(segons);
-        model.setSolucio(puntsSolucio);
-
-        // Notifiquem la finalització només si no és el càlcul de la constant inicial
-        if (!this.calculaCMInicial) {
-            controlador.notificar(Notificacio.FINALITZA);
-        }
+        calcular();
     }
 
     /**
