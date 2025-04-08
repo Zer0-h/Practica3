@@ -1,8 +1,11 @@
 package procesos;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import model.Metode;
 
 /**
@@ -41,21 +44,28 @@ public class BruteForceProcess extends AbstractCalculProcess {
         int numPunts = punts.length;
         int blockSize = numPunts / numThreads;
 
+        ArrayList<Future<?>> futures = new ArrayList<>();
         // Creació de tasques i enviament a l'executor
         for (int t = 0; t < numThreads; t++) {
             int start = t * blockSize;
             int end = (t == numThreads - 1) ? numPunts : (t + 1) * blockSize;
-
-            executor.execute(() -> {
+            futures.add(executor.submit(() -> {
                 for (int i = start; i < end; i++) {
                     for (int j = i + 1; j < numPunts; j++) {
                         setSolucio(punts[i], punts[j]);
                     }
                 }
-            });
+            }));
         }
 
-        executor.shutdown();
+        // Iniciam totes les tasques de forma concurrent
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

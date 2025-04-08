@@ -54,7 +54,7 @@ public class Controlador {
     private void calcularConstants() {
         // Generem un conjunt de punts per calcular les constants
         model.resetSolucio();
-        Point2D.Double[] punts = model.generarPunts(10000);
+        Point2D.Double[] punts = model.generarPunts(100000);
 
         // Crear processos per cada algorisme
         AbstractCalculProcess procesBruteForce = new BruteForceProcess(true, punts);
