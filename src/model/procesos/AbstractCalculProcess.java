@@ -82,6 +82,12 @@ public abstract class AbstractCalculProcess extends Thread {
         }
     }
 
+    /**
+     * Guarda la solució localment si es vàlida.
+     *
+     * @param p1
+     * @param p2
+     */
     protected void setSolucio(Point2D.Double p1, Point2D.Double p2) {
         double distancia = p1.distance(p2);
 

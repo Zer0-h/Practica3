@@ -47,7 +47,7 @@ public class Vista extends JFrame implements Notificar {
         setTitle("Pràctica 3 - Divideix i Venceràs");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        setSize(1300, 900);
+        setSize(1500, 900);
         setLocationRelativeTo(null);
 
         // Panell superior amb les opcions de configuració
