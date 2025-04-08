@@ -126,7 +126,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
      * @return El mètode CONVEX_HULL.
      */
     @Override
-    protected Metode getMetode() {
+    public Metode getMetode() {
         return Metode.CONVEX_HULL;
     }
 }

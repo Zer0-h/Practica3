@@ -78,7 +78,7 @@ public class BruteForceProcess extends AbstractCalculProcess {
      * @return El mètode FORCA_BRUTA.
      */
     @Override
-    protected Metode getMetode() {
+    public Metode getMetode() {
         return Metode.FORCA_BRUTA;
     }
 }

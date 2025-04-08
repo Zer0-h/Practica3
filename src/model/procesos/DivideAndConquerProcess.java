@@ -68,7 +68,7 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
      * @return El mètode DIVIDEIX.
      */
     @Override
-    protected Metode getMetode() {
+    public Metode getMetode() {
         return Metode.DIVIDEIX;
     }
 }

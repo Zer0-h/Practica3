@@ -110,6 +110,7 @@ public class Controlador {
             protected void done() {
                 long tempsExecucio = System.nanoTime() - tempsInicial;
                 double segons = tempsExecucio / 1_000_000_000.0;
+                model.actualitzarConstant(model.getPunts().length, segons, proces.getMetode());
                 model.setTemps(segons);
                 model.setSolucio(proces.getPuntsSolucio());
                 vista.finalitza();

@@ -108,5 +108,5 @@ public abstract class AbstractCalculProcess implements Runnable {
      * @return El mètode utilitzat (FUERZA_BRUTA, DIVIDE_Y_VENCERAS o
      *         CONVEX_HULL).
      */
-    protected abstract Metode getMetode();
+    public abstract Metode getMetode();
 }
