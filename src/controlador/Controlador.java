@@ -13,10 +13,10 @@ import static model.Metode.CONVEX_HULL;
 import static model.Metode.DIVIDEIX;
 import static model.Metode.FORCA_BRUTA;
 import model.Model;
-import model.procesos.AbstractCalculProcess;
-import model.procesos.BruteForceProcess;
-import model.procesos.ConvexHullProcess;
-import model.procesos.DivideAndConquerProcess;
+import procesos.AbstractCalculProcess;
+import procesos.BruteForceProcess;
+import procesos.ConvexHullProcess;
+import procesos.DivideAndConquerProcess;
 import vista.Vista;
 
 /**
@@ -57,14 +57,35 @@ public class Controlador {
         Point2D.Double[] punts = model.generarPunts(10000);
 
         // Crear processos per cada algorisme
-        AbstractCalculProcess procesBruteForce = new BruteForceProcess(this, punts);
-        AbstractCalculProcess procesDivideConquer = new DivideAndConquerProcess(this, punts);
-        AbstractCalculProcess procesConvexHull = new ConvexHullProcess(this, punts);
+        AbstractCalculProcess procesBruteForce = new BruteForceProcess(true, punts);
+        AbstractCalculProcess procesDivideConquer = new DivideAndConquerProcess(true, punts);
+        AbstractCalculProcess procesConvexHull = new ConvexHullProcess(false, punts);
 
         // Iniciar els processos de forma concurrent
-        procesBruteForce.run();
-        procesDivideConquer.run();
-        procesConvexHull.run();
+        executarProcesCM(procesBruteForce, punts.length);
+        executarProcesCM(procesDivideConquer, punts.length);
+        executarProcesCM(procesConvexHull, punts.length);
+    }
+
+    private void executarProcesCM(AbstractCalculProcess proces, long n) {
+        long tempsInicial = System.nanoTime();
+
+        // Llança el procés en segon pla amb SwingWorker
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                proces.run();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                long tempsExecucio = System.nanoTime() - tempsInicial;
+                double segons = tempsExecucio / 1_000_000_000.0;
+                model.actualitzarConstant(n, segons, proces.getMetode());
+            }
+        };
+        worker.execute();
     }
 
     // Inicia el procés de càlcul segons el mètode seleccionat
@@ -80,16 +101,16 @@ public class Controlador {
         // Selecció de l'algorisme segons el mètode
         switch (model.getMetode()) {
             case FORCA_BRUTA ->
-                proces = new BruteForceProcess(this);
+                proces = new BruteForceProcess(model.esMinimizar(), model.getPunts());
             case DIVIDEIX ->
-                proces = new DivideAndConquerProcess(this);
+                proces = new DivideAndConquerProcess(model.esMinimizar(), model.getPunts());
             case CONVEX_HULL -> {
                 // Comprovació de validesa: el convex hull no serveix per a la parella més propera
                 if (model.esMinimizar()) {
                     vista.errorExecucio("No es pot executar el procés " + Metode.CONVEX_HULL + " per a la parella de punts més propera");
                     return;
                 } else {
-                    proces = new ConvexHullProcess(this);
+                    proces = new ConvexHullProcess(model.esMinimizar(), model.getPunts());
                 }
             }
             default ->
@@ -128,17 +149,14 @@ public class Controlador {
         model.resetSolucio();
         model.setMostrarLineaSolucio(false);
 
-        // Obtenir punts generats
-        Point2D.Double[] punts = model.getPunts();
-
         // Crear processos per a cada mètode
         List<Callable<ComparativaResultat>> tasques = new ArrayList<>();
-        tasques.add(crearTascaComparativa(new BruteForceProcess(this, punts), "Força Bruta"));
-        tasques.add(crearTascaComparativa(new DivideAndConquerProcess(this, punts), "Divideix i Venceràs"));
+        tasques.add(crearTascaComparativa(new BruteForceProcess(model.esMinimizar(), model.getPunts()), "Força Bruta"));
+        tasques.add(crearTascaComparativa(new DivideAndConquerProcess(model.esMinimizar(), model.getPunts()), "Divideix i Venceràs"));
 
         // Només afegir Convex Hull si estem en mode maximitzar
         if (!model.esMinimizar()) {
-            tasques.add(crearTascaComparativa(new ConvexHullProcess(this, punts), "Convex Hull"));
+            tasques.add(crearTascaComparativa(new ConvexHullProcess(model.esMinimizar(), model.getPunts()), "Convex Hull"));
         }
 
         // Utilitzar un executor per paral·lelitzar les comparatives

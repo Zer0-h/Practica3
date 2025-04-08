@@ -203,19 +203,6 @@ public class Model {
     }
 
     /**
-     * Calcula el producte vectorial entre tres punts.
-     *
-     * @param punt1
-     * @param punt2
-     * @param punt3
-     *
-     * @return Resultat del producte
-     */
-    public double producteVectorial(Point2D.Double punt1, Point2D.Double punt2, Point2D.Double punt3) {
-        return (punt2.getX() - punt1.getX()) * (punt3.getY() - punt1.getY()) - (punt2.getY() - punt1.getY()) * (punt3.getX() - punt1.getX());
-    }
-
-    /**
      * Getters i setters
      */
     public void setMostrarLineaSolucio(boolean value) {

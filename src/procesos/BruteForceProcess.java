@@ -1,12 +1,8 @@
-package model.procesos;
+package procesos;
 
-import controlador.Controlador;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import model.Metode;
 
 /**
@@ -22,22 +18,14 @@ import model.Metode;
 public class BruteForceProcess extends AbstractCalculProcess {
 
     /**
-     * Constructor per defecte: utilitza els punts del model.
-     *
-     * @param controlador El controlador de l'aplicació.
-     */
-    public BruteForceProcess(Controlador controlador) {
-        super(controlador);
-    }
-
-    /**
      * Constructor amb punts específics (utilitzat per a càlculs de constants).
      *
-     * @param controlador El controlador de l'aplicació.
-     * @param punts       Conjunt de punts a utilitzar.
+     * @param minimitzar Si el problema es per trobar la parella minima o
+     *                   màxima.
+     * @param punts      Conjunt de punts a utilitzar.
      */
-    public BruteForceProcess(Controlador controlador, Point2D.Double[] punts) {
-        super(controlador, punts);
+    public BruteForceProcess(boolean minimitzar, Point2D.Double[] punts) {
+        super(minimitzar, punts);
     }
 
     /**
@@ -52,8 +40,6 @@ public class BruteForceProcess extends AbstractCalculProcess {
 
         int numPunts = punts.length;
         int blockSize = numPunts / numThreads;
-
-        List<Future<Void>> futures = new ArrayList<>();
 
         // Creació de tasques i enviament a l'executor
         for (int t = 0; t < numThreads; t++) {

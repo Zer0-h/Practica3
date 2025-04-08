@@ -1,9 +1,7 @@
-package model.procesos;
+package procesos;
 
-import controlador.Controlador;
 import java.awt.geom.Point2D;
 import model.Metode;
-import model.Model;
 
 /**
  * Classe AbstractCalculProcess: Classe abstracta per gestionar el procés de
@@ -17,39 +15,24 @@ import model.Model;
  */
 public abstract class AbstractCalculProcess implements Runnable {
 
-    protected Controlador controlador; // Referència al controlador principal
-    protected Model model; // Referència al model de dades
     protected Point2D.Double[] punts; // Conjunt de punts a processar
     protected Point2D.Double[] puntsSolucio;  // Solució específica del procés
     protected double millorDistancia;
     protected boolean minimaDistancia;
 
     /**
-     * Constructor per a càlculs normals (utilitzant punts del model).
-     *
-     * @param c El controlador principal de l'aplicació.
-     */
-    public AbstractCalculProcess(Controlador c) {
-        initValues(c, null);
-    }
-
-    /**
      * Constructor per a càlculs específics (per calcular la constant
      * multiplicativa).
      *
-     * @param c El controlador principal de l'aplicació.
-     * @param p Conjunt de punts generats per a càlcul inicial de constants.
+     * @param minimitzar Si el problema es per trobar la parella minima o
+     *                   màxima.
+     * @param p          Conjunt de punts generats per a càlcul inicial de
+     *                   constants.
      */
-    public AbstractCalculProcess(Controlador c, Point2D.Double[] p) {
-        initValues(c, p);
-    }
-
-    private void initValues(Controlador c, Point2D.Double[] p) {
-        controlador = c;
-        model = controlador.getModel();
-        minimaDistancia = model.esMinimizar();
+    public AbstractCalculProcess(boolean minimitzar, Point2D.Double[] p) {
+        minimaDistancia = minimitzar;
         millorDistancia = minimaDistancia ? Double.MAX_VALUE : Double.MIN_VALUE;
-        punts = p != null ? p : model.getPunts();
+        punts = p;
     }
 
     /**

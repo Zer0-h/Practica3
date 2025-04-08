@@ -1,4 +1,4 @@
-package model.procesos;
+package procesos;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;

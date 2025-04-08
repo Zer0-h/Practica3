@@ -1,6 +1,5 @@
-package model.procesos;
+package procesos;
 
-import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,22 +22,14 @@ import model.Metode;
 public class ConvexHullProcess extends AbstractCalculProcess {
 
     /**
-     * Constructor per defecte: utilitza els punts del model.
-     *
-     * @param controlador El controlador de l'aplicació.
-     */
-    public ConvexHullProcess(Controlador controlador) {
-        super(controlador);
-    }
-
-    /**
      * Constructor amb punts específics (utilitzat per a càlculs de constants).
      *
-     * @param controlador El controlador de l'aplicació.
-     * @param punts       Conjunt de punts a utilitzar.
+     * @param minimitzar Si el problema es per trobar la parella minima o
+     *                   màxima.
+     * @param punts      Conjunt de punts a utilitzar.
      */
-    public ConvexHullProcess(Controlador controlador, Point2D.Double[] punts) {
-        super(controlador, punts);
+    public ConvexHullProcess(boolean minimitzar, Point2D.Double[] punts) {
+        super(minimitzar, punts);
     }
 
     /**
@@ -70,7 +61,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
 
         // Construcció de la part inferior del convex hull
         for (Point2D.Double p : sortedPoints) {
-            while (hull.size() >= 2 && model.producteVectorial(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
+            while (hull.size() >= 2 && producteVectorial(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
                 hull.remove(hull.size() - 1);
             }
             hull.add(p);
@@ -80,7 +71,7 @@ public class ConvexHullProcess extends AbstractCalculProcess {
         int t = hull.size() + 1;
         for (int i = sortedPoints.size() - 2; i >= 0; i--) {
             Point2D.Double p = sortedPoints.get(i);
-            while (hull.size() >= t && model.producteVectorial(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
+            while (hull.size() >= t && producteVectorial(hull.get(hull.size() - 2), hull.get(hull.size() - 1), p) <= 0) {
                 hull.remove(hull.size() - 1);
             }
             hull.add(p);
@@ -118,6 +109,19 @@ public class ConvexHullProcess extends AbstractCalculProcess {
                 }
             }
         }
+    }
+
+    /**
+     * Calcula el producte vectorial entre tres punts.
+     *
+     * @param punt1
+     * @param punt2
+     * @param punt3
+     *
+     * @return Resultat del producte
+     */
+    public double producteVectorial(Point2D.Double punt1, Point2D.Double punt2, Point2D.Double punt3) {
+        return (punt2.getX() - punt1.getX()) * (punt3.getY() - punt1.getY()) - (punt2.getY() - punt1.getY()) * (punt3.getX() - punt1.getX());
     }
 
     /**

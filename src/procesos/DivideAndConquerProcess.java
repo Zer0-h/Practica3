@@ -1,6 +1,5 @@
-package model.procesos;
+package procesos;
 
-import controlador.Controlador;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -24,22 +23,14 @@ public class DivideAndConquerProcess extends AbstractCalculProcess {
     private static final ForkJoinPool forkJoinPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
 
     /**
-     * Constructor per defecte: utilitza els punts del model.
-     *
-     * @param controlador El controlador de l'aplicació.
-     */
-    public DivideAndConquerProcess(Controlador controlador) {
-        super(controlador);
-    }
-
-    /**
      * Constructor amb punts específics (utilitzat per a càlculs de constants).
      *
-     * @param controlador El controlador de l'aplicació.
-     * @param punts       Conjunt de punts a utilitzar.
+     * @param minimitzar Si el problema es per trobar la parella minima o
+     *                   màxima.
+     * @param punts      Conjunt de punts a utilitzar.
      */
-    public DivideAndConquerProcess(Controlador controlador, Point2D.Double[] punts) {
-        super(controlador, punts);
+    public DivideAndConquerProcess(boolean minimitzar, Point2D.Double[] punts) {
+        super(minimitzar, punts);
     }
 
     /**
