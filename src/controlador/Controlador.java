@@ -27,8 +27,7 @@ import vista.Vista;
  * les dades i la interfície gràfica.
  *
  * Aquesta classe centralitza la lògica de coordinació, assegurant que el model
- * i la vista
- * es mantinguin desacoblats mitjançant la gestió d'esdeveniments.
+ * i la vista es mantinguin desacoblats mitjançant la gestió d'esdeveniments.
  *
  * @author tonitorres
  */
