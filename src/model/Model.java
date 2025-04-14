@@ -47,7 +47,7 @@ public class Model {
 
         switch (metode) {
             case FORCA_BRUTA ->
-                tempsEstimat = constantBruteForce * (n * (n - 1) / 2.0);
+                tempsEstimat = constantBruteForce * Math.pow(n, 2);
             case DIVIDEIX ->
                 tempsEstimat = constantDivideConquer * n * Math.log(n);
             case CONVEX_HULL ->
@@ -69,7 +69,7 @@ public class Model {
     public void actualitzarConstant(long n, double tempsExecucio, Metode metode) {
         switch (metode) {
             case FORCA_BRUTA ->
-                constantBruteForce = tempsExecucio / (n * (n - 1) / 2.0);
+                constantBruteForce = tempsExecucio / Math.pow(n, 2);
             case DIVIDEIX ->
                 constantDivideConquer = tempsExecucio / (n * Math.log(n));
             case CONVEX_HULL ->
